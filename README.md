@@ -1,15 +1,22 @@
 # Option-Pricing-System
 This project provides a high-performance C++ library for pricing various types of financial options, using industry-standard models such as Black-Scholes and Monte Carlo simulations. 
 
-# Features
-## Models Included
+## Installation
+To compile and run the project, ensure you have a C++ compiler and make installed on your system. The project will eventually be structured to use a Makefile for easy compilation.
+
+## Overview
 * Black-Scholes-Merton (BSM): Closed-form solutions for European vanilla call and put options.
 * Monte Carlo Simulation: A flexible method for pricing path-dependent (e.g., Asian) and multi-asset options.
 * Binomial Tree Models: An iterative approach for pricing American options with potential early exercise.
 * Option Pricers: Houses a variety of pricers (Asian, Barrier, European, etc.)
 * Finite Difference Methods: Numerical solutions for solving the Black-Scholes PDE.
 
-# Future Improvements
+## Project Structure
+* Makefile: Contains rules for compiling the project.
+* include/: Header files for the project.
+  * 
+
+## Future Improvements
 The current state is nice for experimentation but some key features should be added to fully productionize this system.
 * Comprehensive folder structure
 * Market Data Loader: This component reads financial data (like stock prices, interest rates, and volatilities) from external sources, such as CSV files, to prepare the data for the pricing models.
