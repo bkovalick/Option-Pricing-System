@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BE7509E1-A445-48C3-B115-003BAC894767}</ProjectGuid>
+    <RootNamespace>MCOptionPricing</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ExecutablePath>C:\local\boost_1_59_0;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\local\boost_1_59_0\lib64-msvc-14.0;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExecutablePath>C:\local\boost_1_59_0;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\local\boost_1_59_0\lib64-msvc-14.0;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExecutablePath>C:\local\boost_1_59_0;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\local\boost_1_59_0\lib64-msvc-14.0;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ExecutablePath>C:\local\boost_1_59_0;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>C:\local\boost_1_59_0\lib64-msvc-14.0;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>C:\local\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\local\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AsianPricer.hpp" />
+    <ClInclude Include="BarrierPricer.hpp" />
+    <ClInclude Include="BoxMuller.hpp" />
+    <ClInclude Include="CEV.hpp" />
+    <ClInclude Include="DerivativeFree.hpp" />
+    <ClInclude Include="DiscreteMilstein.hpp" />
+    <ClInclude Include="EulerFdm.hpp" />
+    <ClInclude Include="EuropeanPricer.hpp" />
+    <ClInclude Include="ExactFdm.hpp" />
+    <ClInclude Include="FDM.hpp" />
+    <ClInclude Include="FdmBase.hpp" />
+    <ClInclude Include="FittedMidpointPredictorCorrectorFdm.hpp" />
+    <ClInclude Include="GBM.hpp" />
+    <ClInclude Include="Heun.hpp" />
+    <ClInclude Include="LinearCongEngine.hpp" />
+    <ClInclude Include="MCBuilder.hpp" />
+    <ClInclude Include="MCMediator.hpp" />
+    <ClInclude Include="MersenneTwister.hpp" />
+    <ClInclude Include="MidpointPredictorCorrectorFdm.hpp" />
+    <ClInclude Include="MilsteinFdm.hpp" />
+    <ClInclude Include="ModifiedPredictorCorrectorFdm.hpp" />
+    <ClInclude Include="OptionData.hpp" />
+    <ClInclude Include="PredictorCorrectorFdm.hpp" />
+    <ClInclude Include="Pricer.hpp" />
+    <ClInclude Include="Rng.hpp" />
+    <ClInclude Include="Sde.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AsianPricer.cpp" />
+    <ClCompile Include="BarrierPricer.cpp" />
+    <ClCompile Include="BoxMuller.cpp" />
+    <ClCompile Include="CEV.cpp" />
+    <ClCompile Include="DerivativeFree.cpp" />
+    <ClCompile Include="DiscreteMilstein.cpp" />
+    <ClCompile Include="EulerFdm.cpp" />
+    <ClCompile Include="EuropeanPricer.cpp" />
+    <ClCompile Include="ExactFdm.cpp" />
+    <ClCompile Include="FittedMidpointPredictorCorrectorFdm.cpp" />
+    <ClCompile Include="GBM.cpp" />
+    <ClCompile Include="Heun.cpp" />
+    <ClCompile Include="LinearCongEngine.cpp" />
+    <ClCompile Include="MCBuilder.cpp" />
+    <ClCompile Include="MCMediator.cpp" />
+    <ClCompile Include="MersenneTwister.cpp" />
+    <ClCompile Include="MidpointPredictorCorrectorFdm.cpp" />
+    <ClCompile Include="MilsteinFdm.cpp" />
+    <ClCompile Include="ModifiedPredictorCorrectorFdm.cpp" />
+    <ClCompile Include="PredictorCorrectorFdm.cpp" />
+    <ClCompile Include="TestMC.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
