@@ -10,6 +10,7 @@ git clone https://github.com/bkovalick/Option-Pricing-System.git
 
 # Navigate to the project directory
 cd Option-Pricing-System
+```
 
 ## Overview
 * Black-Scholes-Merton (BSM): Closed-form solutions for European vanilla call and put options.
