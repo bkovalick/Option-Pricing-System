@@ -4,6 +4,13 @@ This project provides a high-performance C++ library for pricing various types o
 ## Installation
 To compile and run the project, ensure you have a C++ compiler and make installed on your system. The project will eventually be structured to use a Makefile for easy compilation.
 
+```bash
+# Clone the repository
+git clone https://github.com/bkovalick/Option-Pricing-System.git
+
+# Navigate to the project directory
+cd Option-Pricing-System
+
 ## Overview
 * Black-Scholes-Merton (BSM): Closed-form solutions for European vanilla call and put options.
 * Monte Carlo Simulation: A flexible method for pricing path-dependent (e.g., Asian) and multi-asset options.
