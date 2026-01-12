@@ -4,8 +4,8 @@
 #ifndef EulerFdm_HPP
 #define EulerFdm_HPP
 
-#include "FdmBase.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include <memory>
 
 // Implement the euler finite difference scheme

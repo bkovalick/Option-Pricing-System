@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the DerivativeFree FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/DerivativeFree.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/DerivativeFree.hpp"
 
 // Default Constructor
 DerivativeFree::DerivativeFree() : FdmBase()

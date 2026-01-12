@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for the Linear Congruential Engine.
 
-#include "include/BusinessLogic/Models/RandomNumberGenerators/LinearCongEngine.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/LinearCongEngine.hpp"
 
 // Default Constructor
 LinearCongEngine::LinearCongEngine()

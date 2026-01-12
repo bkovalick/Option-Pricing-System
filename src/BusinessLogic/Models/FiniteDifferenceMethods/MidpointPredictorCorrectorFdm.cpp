@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the MidpointPredictorCorrectorFdm FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/MidpointPredictorCorrectorFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/MidpointPredictorCorrectorFdm.hpp"
 
 // Default Constructor
 MidpointPredictorCorrectorFdm::MidpointPredictorCorrectorFdm() : FdmBase()

@@ -4,8 +4,8 @@
 #ifndef PredictorCorrectorFdm_HPP
 #define PredictorCorrectorFdm_HPP
 
-#include "FdmBase.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include <memory>
 
 class PredictorCorrectorFdm : public FdmBase

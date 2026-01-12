@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the Milstein FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/MilsteinFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/MilsteinFdm.hpp"
 
 // Default Constructor
 MilsteinFdm::MilsteinFdm() : FdmBase()

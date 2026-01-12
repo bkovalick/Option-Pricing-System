@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for Mersenne Twister
 
-#include "include/BusinessLogic/Models/RandomNumberGenerators/MersenneTwister.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/MersenneTwister.hpp"
 
 // Default Constructor
 MersenneTwister::MersenneTwister()

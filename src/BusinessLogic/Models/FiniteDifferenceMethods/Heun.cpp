@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the Heun FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/Heun.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/Heun.hpp"
 
 // Default Constructor
 Heun::Heun() : FdmBase()

@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for Barrier option class.
 
-#include "BarrierPricer.hpp"
+#include "BusinessLogic/Pricers/BarrierPricer.hpp"
 
 // Argument Constructor
 BarrierPricer::BarrierPricer(const Payoff& payoff, const Discount& discounter)

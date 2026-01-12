@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the Exact FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/ExactFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/ExactFdm.hpp"
 
 // Default Constructor
 ExactFdm::ExactFdm() : FdmBase()

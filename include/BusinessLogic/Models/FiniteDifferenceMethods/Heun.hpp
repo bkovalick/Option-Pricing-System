@@ -4,8 +4,8 @@
 #ifndef Heun_HPP
 #define Heun_HPP
 
-#include "FdmBase.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include <memory>
 
 class Heun : public FdmBase

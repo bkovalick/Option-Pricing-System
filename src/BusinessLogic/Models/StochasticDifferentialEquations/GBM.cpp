@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for Geometric Brownian Motion Class.
 
-#include "include/BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp"
 
 // Default Constructor
 GBM::GBM()

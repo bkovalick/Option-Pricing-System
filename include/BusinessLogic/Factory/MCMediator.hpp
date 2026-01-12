@@ -13,10 +13,10 @@
 #include <chrono>
 #include <thread>
 
-#include "FDM.hpp"
-#include "FdmBase.hpp"
-#include "Sde.hpp"
-#include "Rng.hpp" 
+#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/FDM.hpp"
+#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
+#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/RandomNumberGenerators/Rng.hpp" 
 
 #include <boost/signals2.hpp>
 
