@@ -1,0 +1,25 @@
+As of 1/11/2026
+- Complete redesign of the folder structure
+- include -> only Header files, must mimic structure below
+- BusinessLogic
+	- Main logic
+	- Factory
+		- Houses all factory and build classes (Currently only for Monte Carlo)
+	- Models
+		- SDE
+		- FDM
+		- MonteCarlo
+		- BinomialMethod - https://github.com/bkovalick/Intro-C-Course/tree/main/BinomialMethod/BinomialMethod
+		- Random Number Generators
+		- Greeks -> Calculate Delta, Rho, Vega, etc.
+		- Statistics
+	- Pricers
+		- Asian/Barrier/European
+- Core
+	- Domain
+		- Domain objects are core software components that model real-world concepts
+	- Repositories
+		- Currently nothing in here as we don't connect to a database
+- Data
+	- MarketData
+		- Nothing in here but ideally source market data and perhaps instrument config data.
