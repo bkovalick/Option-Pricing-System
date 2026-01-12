@@ -5,7 +5,7 @@
 #define BrownianBridgePricer_HPP
 
 #include "Pricer.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 
 #include <vector>
 #include <iostream>
