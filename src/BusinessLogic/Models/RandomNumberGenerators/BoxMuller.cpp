@@ -1,7 +1,7 @@
-	// Author: Ben Kovalick
+// Author: Ben Kovalick
 // Purpose: Source file for BoxMuller
 
-#include "BoxMuller.hpp"
+#include "include/BusinessLogic/Models/RandomNumberGenerators/BoxMuller.hpp"
 #include <iostream>
 
 // Default Constructor

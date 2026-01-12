@@ -8,6 +8,7 @@
 #include "include/BusinessLogic/Models/FiniteDifferenceMethods/FDM.hpp"
 #include <vector>
 #include <memory>
+#include <cmath>
 
 class FdmBase : public FDM
 {

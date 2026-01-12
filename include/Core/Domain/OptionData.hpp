@@ -5,19 +5,20 @@
 #define OptionData_HPP
 
 #include <algorithm> // for max()
-#include <boost/parameter.hpp>
+//#include <boost/parameter.hpp>
+#include <cmath>
 
-namespace OptionParams
-{
-	BOOST_PARAMETER_KEYWORD(Tag, strike)
-		BOOST_PARAMETER_KEYWORD(Tag, expiration)
-		BOOST_PARAMETER_KEYWORD(Tag, interestRate)
-		BOOST_PARAMETER_KEYWORD(Tag, volatility)
-		BOOST_PARAMETER_KEYWORD(Tag, dividend)
-		BOOST_PARAMETER_KEYWORD(Tag, beta)
-		BOOST_PARAMETER_KEYWORD(Tag, initialPrice)
-		BOOST_PARAMETER_KEYWORD(Tag, optionType)
-}
+//namespace OptionParams
+//{
+//	BOOST_PARAMETER_KEYWORD(Tag, strike)
+//		BOOST_PARAMETER_KEYWORD(Tag, expiration)
+//		BOOST_PARAMETER_KEYWORD(Tag, interestRate)
+//		BOOST_PARAMETER_KEYWORD(Tag, volatility)
+//		BOOST_PARAMETER_KEYWORD(Tag, dividend)
+//		BOOST_PARAMETER_KEYWORD(Tag, beta)
+//		BOOST_PARAMETER_KEYWORD(Tag, initialPrice)
+//		BOOST_PARAMETER_KEYWORD(Tag, optionType)
+//}
 
 
 // Encapsulate all data in one place
