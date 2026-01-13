@@ -4,32 +4,33 @@
 #ifndef MCBuilder_HPP
 #define MCBuilder_HPP
 
-#include "/repos/Option-Pricing-System/include/Core/Domain/OptionData.hpp"
+// Option Data
+#include "Core/Domain/OptionData.hpp"
 
 // Finite Difference Scheme Classes
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/FDM.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/EulerFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/ExactFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/MilsteinFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/DiscreteMilstein.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/PredictorCorrectorFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/Heun.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/DerivativeFree.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/ModifiedPredictorCorrectorFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/MidpointPredictorCorrectorFdm.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/FiniteDifferenceMethods/FittedMidpointPredictorCorrectorFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FDM.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/EulerFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/ExactFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/MilsteinFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/DiscreteMilstein.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/PredictorCorrectorFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/Heun.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/DerivativeFree.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/ModifiedPredictorCorrectorFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/MidpointPredictorCorrectorFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FittedMidpointPredictorCorrectorFdm.hpp"
 
 // Stochastic Differential Equation Classes
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/StochasticDifferentialEquations/CEV.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/CEV.hpp"
 
 // Random Number Generation Classes
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/RandomNumberGenerators/Rng.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/RandomNumberGenerators/MersenneTwister.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/RandomNumberGenerators/BoxMuller.hpp"
-#include "/repos/Option-Pricing-System/include/BusinessLogic/Models/RandomNumberGenerators/LinearCongEngine.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/Rng.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/MersenneTwister.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/BoxMuller.hpp"
+#include "BusinessLogic/Models/RandomNumberGenerators/LinearCongEngine.hpp"
 
 #include <iostream>
 #include <memory>

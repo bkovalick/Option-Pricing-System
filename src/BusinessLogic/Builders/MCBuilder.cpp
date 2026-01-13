@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Implementation of the builder pattern
 
-#include "BusinessLogic/Factory/MCBuilder.hpp"
+#include "BusinessLogic/Builders/MCBuilder.hpp"
 
 // Default Constructor
 MCBuilder::MCBuilder()

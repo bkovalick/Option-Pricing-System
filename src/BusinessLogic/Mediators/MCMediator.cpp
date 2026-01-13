@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Implementation of the mediator pattern.
 
-#include "BusinessLogic/Factory/MCMediator.hpp"
+#include "BusinessLogic/Mediators/MCMediator.hpp"
 
 using namespace Concurrency;
 
