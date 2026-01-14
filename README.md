@@ -20,9 +20,17 @@ cd Option-Pricing-System
 * Finite Difference Methods: Numerical solutions for solving the Black-Scholes PDE.
 
 ## Project Structure
-* Makefile: Contains rules for compiling the project.
-* include/: Header files for the project.
-  * 
+- Makefile: Contains rules for compiling the project.
+- include/: Header files for the project.
+  - `BusinessLogic/Factory/`: Contains the `PricingEngineFactory` for creating engine instances.
+  - `BusinessLogic/Builders/`: Contains implementations following the builder pattern, i.e. create the system parts of a monte carlo simulation.
+  - `BusinessLogic/Engines/`: Pricing engines, MonteCarlo/Binomial/Black-Scholes - would more or less replicate an entry point (main).
+  - `BusinessLogic/Mediators/`: System coordinators, i.e. coordinates the starting and stopping of an engine. This could be generic or each engine could have one.
+  - `BusinessLogic/Models/`: Contains models or calculators used by the pricing engines.
+  - `Core/Domain/`: Domain-specific classes, like `Option`.
+  - `Core/Repositories/`: Mediator between the business logic (domain layer) and the data mapping layers.
+  - `Data/`: Lowest level, direct interface to an external data source. Map to DTO's.
+- `src/`: Source files mirroring the structure in `include/`.
 
 ## Future Improvements
 The current state is nice for experimentation but some key features should be added to fully productionize this system.
