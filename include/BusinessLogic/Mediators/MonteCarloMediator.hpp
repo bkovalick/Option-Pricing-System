@@ -2,8 +2,8 @@
 // Purpose: Mediator header file, the main responsibility of this class is to coordinate 
 // the other components in the system.
 
-#ifndef MCMediator_HPP
-#define MCMediator_HPP
+#ifndef MonteCarloMediator_HPP
+#define MonteCarloMediator_HPP
 
 #include <functional>
 #include <algorithm>
@@ -31,7 +31,7 @@ using PathEvent = boost::signals2::signal<void(const T& t)>; // Send a path arra
 
 using EndOfSimulation = boost::signals2::signal<void()>; // No more paths
 
-class MCMediator
+class MonteCarloMediator : public Mediator
 {
 private:
 	// Main components
@@ -45,18 +45,23 @@ private:
 
 public:
 	// Argument constructor
-	MCMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
+	MonteCarloMediator();
+	MonteCarloMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
 		int numberSimulations);
 
 	// Destructor
-	virtual ~MCMediator();
+	virtual ~MonteCarloMediator();
+
+	// Process request from the client
+	void processRequest(const std::string& request) override;
 
 	// Responsible for path generation
 	void start(); 
 	void startPPL();
 	void startOpenMP();
 
-	void disconnect(); 
+	// Disconnect from all slots.
+	void disconnect();
 
 	// Event notification
 	PathEvent<std::vector<double>> path; // Signal to the pricers

@@ -1,35 +1,47 @@
 // Author: Ben Kovalick
 // Purpose: Implementation of the mediator pattern.
 
-#include "BusinessLogic/Mediators/MCMediator.hpp"
+#include "BusinessLogic/Mediators/MonteCarloMediator.hpp"
 
 using namespace Concurrency;
 
+MonteCarloMediator::MonteCarloMediator() : NSim(10000)
+{
+	// Default constructor
+}
+
 // Argument Constructor
-MCMediator::MCMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
+MonteCarloMediator::MonteCarloMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
 	int numberSimulations) : NSim(numberSimulations)
 {
 	sde_ = std::get<0>(parts);
 	fdm_ = std::get<1>(parts);
 	rng_ = std::get<2>(parts);
-
-	// 1, 2 and 3 should be passed through the constructor
-	// 1. Define slots for path information -> Pass in PathEvent Signal
-
-	// 2. Signal end of simulation -> Pass in EndOfSimulation Signal
-
-	// 3. Pass in number of simulations 
-
-	// Ensure size of array is consistent with user defined timesteps.
 	res.resize(fdm_->NT + 1);
 }
 
-// Destructor
-MCMediator::~MCMediator()
-{}
+MonteCarloMediator::~MonteCarloMediator()
+{
+}
+
+void MonteCarloMediator::processRequest(const std::string& request)
+{
+	// Request will be a json or domain model object, perhaps a list of requests?
+	// The idea is simple, it will create sde, fdm, rng based on the request
+	
+	//if (request == "start")
+	//{
+	//	start(); // Start the path generation
+	//}
+	//else
+	//{
+	//	throw std::invalid_argument("Unknown request: " + request);
+	//}
+}
+
 
 // Path generation function
-void MCMediator::start()
+void MonteCarloMediator::start()
 {
 	double VOld, VNew;
 	std::shared_future<double> VNew2;
@@ -58,7 +70,7 @@ void MCMediator::start()
 }
 
 // MC simulation using OpenMP for parallelization 
-void MCMediator::startOpenMP()
+void MonteCarloMediator::startOpenMP()
 {
 	double VOld, VNew;
 	int tid = 0;
@@ -92,7 +104,7 @@ void MCMediator::startOpenMP()
 }
 
 // MC simulation using the PPL library for parallelization
-void MCMediator::startPPL()
+void MonteCarloMediator::startPPL()
 {
 	double VOld, VNew;
 
@@ -118,7 +130,7 @@ void MCMediator::startPPL()
 }
 
 // Disconnect from all slots.
-void MCMediator::disconnect()
+void MonteCarloMediator::disconnect()
 {
 	path.disconnect_all_slots();
 	finish.disconnect_all_slots();

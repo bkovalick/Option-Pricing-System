@@ -18,10 +18,10 @@
     <ClCompile Include="Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\businesslogic\factory\MCBuilder.cpp">
+    <ClCompile Include="src\BusinessLogic\Builders\MCBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\businesslogic\factory\MCMediator.cpp">
+    <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp">
@@ -81,12 +81,18 @@
     <ClCompile Include="src\businesslogic\pricers\EuropeanPricer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\MediatorFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Models\Greeks\GreeksCalculator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\businesslogic\factory\MCBuilder.hpp">
+    <ClInclude Include="include\BusinessLogic\Builders\MCBuilder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\businesslogic\factory\MCMediator.hpp">
+    <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp">
@@ -162,6 +168,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\core\domain\OptionData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\MediatorFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Models\Greeks\GreeksCalculator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

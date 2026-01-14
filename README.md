@@ -22,11 +22,11 @@ cd Option-Pricing-System
 ## Project Structure
 - Makefile: Contains rules for compiling the project.
 - include/: Header files for the project.
-  - `BusinessLogic/Factory/`: Contains the `PricingEngineFactory` for creating engine instances.
+  - `BusinessLogic/Factory/`: Contains the `MediatorFactory` for creating mediator instances.
   - `BusinessLogic/Builders/`: Contains implementations following the builder pattern, i.e. create the system parts of a monte carlo simulation.
-  - `BusinessLogic/Engines/`: Pricing engines, MonteCarlo/Binomial/Black-Scholes - would more or less replicate an entry point (main).
-  - `BusinessLogic/Mediators/`: System coordinators, i.e. coordinates the starting and stopping of an engine. This could be generic or each engine could have one.
+  - `BusinessLogic/Mediators/`: System coordinators, i.e. coordinates the starting and stopping of an engine. 
   - `BusinessLogic/Models/`: Contains models or calculators used by the pricing engines.
+  - `BusinessLogic/Pricers/`: Contains models of different option pricers.
   - `Core/Domain/`: Domain-specific classes, like `Option`.
   - `Core/Repositories/`: Mediator between the business logic (domain layer) and the data mapping layers.
   - `Data/`: Lowest level, direct interface to an external data source. Map to DTO's.
