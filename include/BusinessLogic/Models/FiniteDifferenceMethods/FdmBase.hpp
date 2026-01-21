@@ -14,29 +14,29 @@ class FdmBase : public FDM
 {
 protected:
 	std::shared_ptr<Sde> sde_;
-	double dtSqrt;
+	double dtSqrt{0.0};
 
 public:
-	int NT; // Number of subdivisons
+	int NT{0}; // Number of subdivisons
 	std::vector<double> meshArray; // The mesh array; -> Make this generic
-	double k; // Mesh size
+	double k{0.0}; // Mesh size
 
-	FdmBase() {}; // Default constructor
-	FdmBase(const std::shared_ptr<Sde>& sde, int numSubdivisions) : sde_(sde), NT(numSubdivisions)  // Argument constructor
+	FdmBase() = default; // Default constructor
+	FdmBase(const std::shared_ptr<Sde>& sde, int numSubdivisions) : sde_(sde), NT(numSubdivisions)
 	{
 		k = sde_->Expiry() / (double)NT;
 		dtSqrt = std::sqrt(k);
 		meshArray.resize(NT + 1);
 
 		// Create the mesh array
-		meshArray[0] = 0.0;
+		meshArray[0] = 0.0;	
 		for (unsigned int n = 1; n < meshArray.size(); n++)
 		{
 			meshArray[n] = meshArray[n - 1] + k;
 		}
 	}
 
-	virtual ~FdmBase() {}; // Destructor
+	virtual ~FdmBase() = default;
 
 	std::shared_ptr<Sde> StochasticEquation()
 	{

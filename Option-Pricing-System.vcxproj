@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -93,6 +93,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>D:\Boost\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,13 +119,15 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\Boost\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
-    <ClCompile Include="src\BusinessLogic\Builders\MCBuilder.cpp" />
+    <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\MediatorFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
+    <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DiscreteMilstein.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\EulerFdm.cpp" />
@@ -145,12 +148,14 @@
     <ClCompile Include="src\businesslogic\pricers\BarrierPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\EuropeanPricer.cpp" />
+    <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\BusinessLogic\Builders\MCBuilder.hpp" />
+    <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\MediatorFactory.hpp" />
+    <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DiscreteMilstein.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\EulerFdm.hpp" />
@@ -176,6 +181,7 @@
     <ClInclude Include="include\businesslogic\pricers\BrownianBridgePricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\EuropeanPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\Pricer.hpp" />
+    <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp" />
     <ClInclude Include="include\core\domain\OptionData.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

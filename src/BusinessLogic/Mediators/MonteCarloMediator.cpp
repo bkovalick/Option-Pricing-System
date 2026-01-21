@@ -2,6 +2,8 @@
 // Purpose: Implementation of the mediator pattern.
 
 #include "BusinessLogic/Mediators/MonteCarloMediator.hpp"
+#include <BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp>
+#include <Core/Configuration/SimulationConfig.hpp>
 
 using namespace Concurrency;
 
@@ -24,8 +26,12 @@ MonteCarloMediator::~MonteCarloMediator()
 {
 }
 
-void MonteCarloMediator::processRequest(const std::string& request)
+void MonteCarloMediator::processRequest(const SimulationConfig& request)
 {
+	//sde_ = std::make_shared<GBM>();
+	//fdm_ = std::make_shared<FdmBase>();
+	//rng_ = std::make_shared<>();
+	//res.resize(fdm_->NT + 1);
 	// Request will be a json or domain model object, perhaps a list of requests?
 	// The idea is simple, it will create sde, fdm, rng based on the request
 	

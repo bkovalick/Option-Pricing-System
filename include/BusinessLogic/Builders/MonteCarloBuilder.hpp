@@ -37,7 +37,7 @@
 #include <tuple>
 
 // Will build the appropriate Sde, Fdm and Rng objects.
-class MCBuilder
+class MonteCarloBuilder
 {
 private:
 	double r;
@@ -48,9 +48,9 @@ private:
 	double beta;
 
 public:
-	MCBuilder(); // Default Constructor
-	MCBuilder(const OptionData& optData); // Argument Constructor
-	virtual ~MCBuilder(); // Destructor
+	MonteCarloBuilder(); // Default Constructor
+	MonteCarloBuilder(const OptionData& optData); // Argument Constructor
+	virtual ~MonteCarloBuilder(); // Destructor
 
 	// Parts initialised from the outside
 	std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FDM>, std::shared_ptr<Rng>>
@@ -86,7 +86,7 @@ private:
 	double beta;
 
 public:
-	DefaultBuilder(const OptionData& optData) // Default Constructor
+	DefaultBuilder(const OptionData& optData)
 	{
 		int choice;
 		std::cout << "Use default parameters? 1 = Yes, 0 = No "; std::cin >> choice;

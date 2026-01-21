@@ -18,7 +18,7 @@
     <ClCompile Include="Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Builders\MCBuilder.cpp">
+    <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp">
@@ -87,9 +87,15 @@
     <ClCompile Include="src\BusinessLogic\Models\Greeks\GreeksCalculator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\BusinessLogic\Builders\MCBuilder.hpp">
+    <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp">
@@ -177,6 +183,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

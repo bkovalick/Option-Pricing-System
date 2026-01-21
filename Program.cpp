@@ -9,6 +9,7 @@
 #include <random>
 #include <tuple>
 #include <chrono>
+#include <fstream>
 
 // Pricer classes
 #include "include/BusinessLogic/Pricers/Pricer.hpp"
@@ -18,71 +19,71 @@
 #include "include/BusinessLogic/Pricers/BrownianBridgePricer.hpp"
 
 // Builder/Mediator Classes
-#include "include/BusinessLogic/Builders/MCBuilder.hpp"
+#include "include/BusinessLogic/Builders/MonteCarloBuilder.hpp"
 #include "include/BusinessLogic/Mediators/MonteCarloMediator.hpp"
 #include "include/BusinessLogic/Factory/MediatorFactory.hpp"
 
 // Option Data Struct
 #include "include/Core/Domain/OptionData.hpp"
+#include <Core/Configuration/SimulationConfig.hpp>
+
 
 int main()
 {
-	// create a mediator based on a request. request will contain an nsims if applicable,option, pricer type, sde, fdm and rng types etc.
-	auto mediator = MediatorFactory::createMediator("MonteCarlo");
-	mediator->processRequest("start");
+	// Load configuration from JSON file
+	std::ifstream configFile("config.json");
+	if (!configFile.is_open())
+	{
+		std::cerr << "Error: Could not open config.json" << std::endl;
+		return 1;
+	}
+
+	nlohmann::json configJson;
+	configFile >> configJson;
+	configFile.close();
+
+	// Create configuration from JSON
+	auto config = SimulationConfig::fromJson(configJson);
+	auto mediator = MediatorFactory::createMediator(config.mediatorType);
+	mediator->processRequest(config);
+
+	//for (const auto& mediator : request.mediatorType) {
+	//	auto mediator = MediatorFactory::createMediator("MonteCarlo");
+	//	mediator->processRequest("start");
+	//}
+	
+
+
 	
 	// 1. Initialise the option data
 	// Batch 1
-	OptionData myOption((OptionParams::strike = 65.0, OptionParams::expiration = 0.25,
-		OptionParams::volatility = 0.30, OptionParams::dividend = 0.0,
-		OptionParams::optionType = 1, OptionParams::interestRate = 0.08,
-		OptionParams::beta = 1, OptionParams::initialPrice = 60.0));
+	// Constructor: (strike, expiration, volatility, dividend, optionType, interestRate, beta, initialPrice)
+	OptionData myOption("Batch1_Call", 65.0, 0.25, 0.30, 0.0, 1, 0.08, 1.0, 60.0);
 
 	//// Put
-	//OptionData myOption2((OptionParams::strike = 65.0, OptionParams::expiration = 0.25,
-	//	OptionParams::volatility = 0.30, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = -1, OptionParams::interestRate = 0.08,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 60.0));
+	OptionData myOption2("Batch1_Put", 65.0, 0.25, 0.30, 0.0, -1, 0.08, 1.0, 60.0);
 
 	// Batch 2
-	//OptionData myOption((OptionParams::strike = 100.0, OptionParams::expiration = 1.0,
-	//	OptionParams::volatility = 0.20, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = 1, OptionParams::interestRate = 0.0,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 100.0));
+	//OptionData myOption("Batch2_Call", 100.0, 1.0, 0.20, 0.0, 1, 0.0, 1.0, 100.0);
 
 	// Put
-	//OptionData myOption2((OptionParams::strike = 100.0, OptionParams::expiration = 1.0,
-	//	OptionParams::volatility = 0.20, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = -1, OptionParams::interestRate = 0.0,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 100.0));
+	//OptionData myOption2("Batch2_Put", 100.0, 1.0, 0.20, 0.0, -1, 0.0, 1.0, 100.0);
 
 	// Batch 3
-	//OptionData myOption((OptionParams::strike = 10.0, OptionParams::expiration = 1.0,
-	//	OptionParams::volatility = 0.50, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = 1, OptionParams::interestRate = 0.12,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 5.0));
+	//OptionData myOption("Batch3_Call", 10.0, 1.0, 0.50, 0.0, 1, 0.12, 1.0, 5.0);
 
 	// Put
-	//OptionData myOption2((OptionParams::strike = 10.0, OptionParams::expiration = 1.0,
-	//	OptionParams::volatility = 0.50, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = -1, OptionParams::interestRate = 0.12,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 5.0));
+	//OptionData myOption2("Batch3_Put", 10.0, 1.0, 0.50, 0.0, -1, 0.12, 1.0, 5.0);
 
 	// Batch 4
-	//OptionData myOption((OptionParams::strike = 100.0, OptionParams::expiration = 30.0,
-	//	OptionParams::volatility = 0.30, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = 1, OptionParams::interestRate = 0.08,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 100.0));
+	//OptionData myOption("Batch4_Call", 100.0, 30.0, 0.30, 0.0, 1, 0.08, 1.0, 100.0);
 
 	//// Put
-	//OptionData myOption2((OptionParams::strike = 100.0, OptionParams::expiration = 30.0,
-	//	OptionParams::volatility = 0.30, OptionParams::dividend = 0.0,
-	//	OptionParams::optionType = -1, OptionParams::interestRate = 0.08,
-	//	OptionParams::beta = 1, OptionParams::initialPrice = 100.0));
+	//OptionData myOption2("Batch4_Put", 100.0, 30.0, 0.30, 0.0, -1, 0.08, 1.0, 100.0);
 
 	// 2. Choose the builder that creates the necessary components
 	int choice = 1;
-	auto parts = MCBuilder::ChooseBuilder(choice, myOption);
+	auto parts = MonteCarloBuilder::ChooseBuilder(choice, myOption);
 
 	// 3. Create the mediator (SUD)
 	int NSim = 1000000;
@@ -99,30 +100,35 @@ int main()
 		{
 			return std::max(0.0, myOption.K - x);
 		}
-	};
+		};
 
 	auto discounter = [&myOption]() {return std::exp(-myOption.r * myOption.T); };
 
 	// 5. Create prices and link them to the mediator.
-	std::shared_ptr<Pricer> op = std::make_shared<EuropeanPricer>(std::bind(&OptionData::myPayOffFunction, myOption, std::placeholders::_1), discounter);
-	std::shared_ptr<Pricer> op2 = std::make_shared<EuropeanPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
-	std::shared_ptr<Pricer> op3 = std::make_shared<AsianPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
-	std::shared_ptr<Pricer> op4 = std::make_shared<BarrierPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
+	std::shared_ptr<Pricer> op = 
+		std::make_shared<EuropeanPricer>(std::bind(&OptionData::myPayOffFunction, myOption, std::placeholders::_1), discounter);
+	std::shared_ptr<Pricer> op2 = 
+		std::make_shared<EuropeanPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
+	std::shared_ptr<Pricer> op3 = 
+		std::make_shared<AsianPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
+	std::shared_ptr<Pricer> op4 = 
+		std::make_shared<BarrierPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
 	
 	// Need SDE process from the builder for the Brownian bridge pricer
 	auto sdeProc = std::get<0>(parts);
-	
+
 	// Need FDM process as well to get the step size.
 	auto fdmProc = std::get<1>(parts);
 	double dt = fdmProc->k;
-	
+
 	// Need RNG process as well to get a random number.
 	auto rngProc = std::get<2>(parts);
 	double gen = rngProc->gen();
 
 	// Brownian Bridge Pricer
-	std::shared_ptr<Pricer> op5 = std::make_shared<BrownianBridgePricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter,
-		sdeProc, gen, dt);
+	std::shared_ptr<Pricer> op5 = 
+		std::make_shared<BrownianBridgePricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), 
+			discounter, sdeProc, gen, dt);
 
 	// Define slots for path information.
 	mcp.path.connect(0, std::bind(&Pricer::ProcessPath, op, std::placeholders::_1));

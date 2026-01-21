@@ -17,6 +17,7 @@
 #include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
 #include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include "BusinessLogic/Models/RandomNumberGenerators/Rng.hpp" 
+#include "BusinessLogic/Mediators/Mediator.hpp"
 
 #include <boost/signals2.hpp>
 
@@ -34,38 +35,26 @@ using EndOfSimulation = boost::signals2::signal<void()>; // No more paths
 class MonteCarloMediator : public Mediator
 {
 private:
-	// Main components
 	std::shared_ptr<Sde> sde_;
 	std::shared_ptr<FdmBase> fdm_;
 	std::shared_ptr<Rng> rng_;
 
-	// Other MC-related data
-	int NSim; // # of simulations
-	std::vector<double> res; // Generated path per simulation
+	int NSim; 
+	std::vector<double> res;
 
 public:
-	// Argument constructor
 	MonteCarloMediator();
 	MonteCarloMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
 		int numberSimulations);
-
-	// Destructor
 	virtual ~MonteCarloMediator();
 
-	// Process request from the client
-	void processRequest(const std::string& request) override;
-
-	// Responsible for path generation
+	void processRequest(const SimulationConfig& request) override;
 	void start(); 
 	void startPPL();
 	void startOpenMP();
-
-	// Disconnect from all slots.
 	void disconnect();
-
-	// Event notification
-	PathEvent<std::vector<double>> path; // Signal to the pricers
-	EndOfSimulation finish; // All paths are complete
+	PathEvent<std::vector<double>> path;
+	EndOfSimulation finish;
 };
 
-#endif // !MCMediator_HPP
+#endif

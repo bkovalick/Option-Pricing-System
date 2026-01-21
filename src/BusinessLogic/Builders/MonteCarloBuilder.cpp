@@ -1,14 +1,14 @@
 // Author: Ben Kovalick
 // Purpose: Implementation of the builder pattern
 
-#include "BusinessLogic/Builders/MCBuilder.hpp"
+#include "BusinessLogic/Builders/MonteCarloBuilder.hpp"
 
 // Default Constructor
-MCBuilder::MCBuilder()
+MonteCarloBuilder::MonteCarloBuilder()
 {}
 
 // Argument Constructor
-MCBuilder::MCBuilder(const OptionData& optData)
+MonteCarloBuilder::MonteCarloBuilder(const OptionData& optData)
 {
 	r = optData.r;
 	v = optData.sig;
@@ -19,12 +19,12 @@ MCBuilder::MCBuilder(const OptionData& optData)
 }
 
 // Destructor
-MCBuilder::~MCBuilder()
+MonteCarloBuilder::~MonteCarloBuilder()
 {}
 
 // Parts initialised from the outside
 std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FDM>, std::shared_ptr<Rng>> 
-MCBuilder::Parts(const std::shared_ptr<Sde>& _sde, const std::shared_ptr<FDM>& _fdm,
+MonteCarloBuilder::Parts(const std::shared_ptr<Sde>& _sde, const std::shared_ptr<FDM>& _fdm,
 	const std::shared_ptr<Rng>& _rng)
 {
 	return std::make_tuple(_sde, _fdm, _rng);
@@ -32,7 +32,7 @@ MCBuilder::Parts(const std::shared_ptr<Sde>& _sde, const std::shared_ptr<FDM>& _
 
 // Parts initialised from the inside
 std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>>
-MCBuilder::Parts()
+MonteCarloBuilder::Parts()
 {
 	std::shared_ptr<Sde> sde = getSde(); // Return a concrete SDE
 	std::shared_ptr<Rng> rng = getRng(); // Return a concrete RNG
@@ -42,7 +42,7 @@ MCBuilder::Parts()
 }
 
 // Returns a pointer to an Sde
-std::shared_ptr<Sde> MCBuilder::getSde()
+std::shared_ptr<Sde> MonteCarloBuilder::getSde()
 {
 	int choice;
 	std::cout << "1. GBM, 2. CEV "; std::cin >> choice;
@@ -65,7 +65,7 @@ std::shared_ptr<Sde> MCBuilder::getSde()
 }
 
 // Returns a pointer to an Fdm
-std::shared_ptr<FdmBase> MCBuilder::getFdm(const std::shared_ptr<Sde>& sde)
+std::shared_ptr<FdmBase> MonteCarloBuilder::getFdm(const std::shared_ptr<Sde>& sde)
 {
 	int NT; // Number of timesteps
 	std::cout << "Please select a number of timesteps: ";
@@ -135,7 +135,7 @@ std::shared_ptr<FdmBase> MCBuilder::getFdm(const std::shared_ptr<Sde>& sde)
 }
 
 // Returns a pointer to a Rng
-std::shared_ptr<Rng> MCBuilder::getRng()
+std::shared_ptr<Rng> MonteCarloBuilder::getRng()
 {
 	// Have user select random number generator
 	int choice;
@@ -144,7 +144,6 @@ std::shared_ptr<Rng> MCBuilder::getRng()
 
 	// Pointer to base class
 	std::shared_ptr<Rng> rng;
-	// Assign to a concrete implementation based on user input.
 	switch (choice)
 	{
 	case 1:
@@ -166,9 +165,9 @@ std::shared_ptr<Rng> MCBuilder::getRng()
 
 // Factory method to choose your builder.
 std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> 
-MCBuilder::ChooseBuilder(int n, const OptionData& optData)
+MonteCarloBuilder::ChooseBuilder(int n, const OptionData& optData)
 { 
-	std::shared_ptr<MCBuilder> builder;
+	std::shared_ptr<MonteCarloBuilder> builder;
 	std::shared_ptr<DefaultBuilder> builder2;
 
 	// Let user choose type of builder.
@@ -178,7 +177,7 @@ MCBuilder::ChooseBuilder(int n, const OptionData& optData)
 	if (n == 1) 
 	{
 		std::cout << "Chosen 1. MCBuilder " << std::endl;
-		builder = std::make_shared<MCBuilder>(optData);
+		builder = std::make_shared<MonteCarloBuilder>(optData);
 		return builder->Parts();
 	}
 	else
