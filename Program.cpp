@@ -42,10 +42,31 @@ int main()
 	configFile >> configJson;
 	configFile.close();
 
+
+	std::vector<OptionData> options;
+	std::vector<std::shared_ptr<Pricer>> pricers;
+	std::vector<std::shared_ptr<Sde>> sdes;
+	std::vector<std::shared_ptr<FdmBase>> fdms;
+	std::vector<std::shared_ptr<Rng>> rngs;
+
 	// Create configuration from JSON
 	auto config = SimulationConfig::fromJson(configJson);
 	auto mediator = MediatorFactory::createMediator(config.mediatorType);
-	mediator->processRequest(config);
+	mediator->configure(config);
+	
+	// Is this what the mediator class will do?
+	for (const auto& opt: config.options) {
+		std::cout << "Configuring option: " << opt.OptionName << std::endl;
+		options.push_back(opt);
+	}
+
+	//for (const auto& pricer : config.pricerTypes) {
+	//	std::cout << "Configuring option: " << pricer << std::endl;
+	//	auto tempPricer = std::make_shared<Pricer>(pricer);
+	//	pricers.push_back(std::move(tempPricer));
+	//	//pricers.push_back(std::make_shared<pricer>);
+	//}
+
 
 	//for (const auto& mediator : request.mediatorType) {
 	//	auto mediator = MediatorFactory::createMediator("MonteCarlo");
@@ -100,7 +121,7 @@ int main()
 		{
 			return std::max(0.0, myOption.K - x);
 		}
-		};
+	};
 
 	auto discounter = [&myOption]() {return std::exp(-myOption.r * myOption.T); };
 
@@ -114,35 +135,35 @@ int main()
 	std::shared_ptr<Pricer> op4 = 
 		std::make_shared<BarrierPricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), discounter);
 	
-	// Need SDE process from the builder for the Brownian bridge pricer
-	auto sdeProc = std::get<0>(parts);
+	//// Need SDE process from the builder for the Brownian bridge pricer
+	//auto sdeProc = std::get<0>(parts);
 
-	// Need FDM process as well to get the step size.
-	auto fdmProc = std::get<1>(parts);
-	double dt = fdmProc->k;
+	//// Need FDM process as well to get the step size.
+	//auto fdmProc = std::get<1>(parts);
+	//double dt = fdmProc->k;
 
-	// Need RNG process as well to get a random number.
-	auto rngProc = std::get<2>(parts);
-	double gen = rngProc->gen();
+	//// Need RNG process as well to get a random number.
+	//auto rngProc = std::get<2>(parts);
+	//double gen = rngProc->gen();
 
-	// Brownian Bridge Pricer
-	std::shared_ptr<Pricer> op5 = 
-		std::make_shared<BrownianBridgePricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), 
-			discounter, sdeProc, gen, dt);
+	//// Brownian Bridge Pricer
+	//std::shared_ptr<Pricer> op5 = 
+	//	std::make_shared<BrownianBridgePricer>(std::bind(&OptionData::myPayOffFunction, myOption2, std::placeholders::_1), 
+	//		discounter, sdeProc, gen, dt);
 
 	// Define slots for path information.
 	mcp.path.connect(0, std::bind(&Pricer::ProcessPath, op, std::placeholders::_1));
 	mcp.path.connect(1, std::bind(&Pricer::ProcessPath, op2, std::placeholders::_1));
 	mcp.path.connect(2, std::bind(&Pricer::ProcessPath, op3, std::placeholders::_1));
 	mcp.path.connect(3, std::bind(&Pricer::ProcessPath, op4, std::placeholders::_1));
-	mcp.path.connect(4, std::bind(&Pricer::ProcessPath, op5, std::placeholders::_1));
+	//mcp.path.connect(4, std::bind(&Pricer::ProcessPath, op5, std::placeholders::_1));
 
 	// Signal end of simulation.
 	mcp.finish.connect(0, std::bind(&Pricer::PostProcess, op));
 	mcp.finish.connect(1, std::bind(&Pricer::PostProcess, op2));
 	mcp.finish.connect(2, std::bind(&Pricer::PostProcess, op3));
 	mcp.finish.connect(3, std::bind(&Pricer::PostProcess, op4));
-	mcp.finish.connect(4, std::bind(&Pricer::PostProcess, op5));
+	//mcp.finish.connect(4, std::bind(&Pricer::PostProcess, op5));
 
 	// 6. Run the program and examine the output.
 	auto start = std::chrono::system_clock::now();

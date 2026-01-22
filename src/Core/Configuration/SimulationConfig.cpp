@@ -7,6 +7,8 @@ using json = nlohmann::json;
 SimulationConfig SimulationConfig::fromJson(const json& json)
 {
     SimulationConfig config;
+
+	// This is where we create concrete structures from the JSON input
     
     // Parse mediator settings
     std::string mediatorStr = json["mediator"]["type"].get<std::string>();

@@ -36,7 +36,7 @@
 #include <memory>
 #include <tuple>
 
-// Will build the appropriate Sde, Fdm and Rng objects.
+// Perhaps we make a builder that makes a list of all the necessary parts
 class MonteCarloBuilder
 {
 private:

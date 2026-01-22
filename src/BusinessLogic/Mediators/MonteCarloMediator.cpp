@@ -26,7 +26,7 @@ MonteCarloMediator::~MonteCarloMediator()
 {
 }
 
-void MonteCarloMediator::processRequest(const SimulationConfig& request)
+void MonteCarloMediator::configure(const SimulationConfig& request)
 {
 	//sde_ = std::make_shared<GBM>();
 	//fdm_ = std::make_shared<FdmBase>();

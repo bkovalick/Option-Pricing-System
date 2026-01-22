@@ -48,7 +48,7 @@ public:
 		int numberSimulations);
 	virtual ~MonteCarloMediator();
 
-	void processRequest(const SimulationConfig& request) override;
+	void configure(const SimulationConfig& request) override;
 	void start(); 
 	void startPPL();
 	void startOpenMP();
