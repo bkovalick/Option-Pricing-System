@@ -4,8 +4,8 @@
 #ifndef MidpointPredictorCorrectorFdm_HPP
 #define MidpointPredictorCorrectorFdm_HPP
 
-#include "FdmBase.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include <memory>
 
 // PC using adjusted drift, Trapezoidal rule

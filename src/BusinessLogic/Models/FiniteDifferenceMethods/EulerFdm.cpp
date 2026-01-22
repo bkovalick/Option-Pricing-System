@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for concrete implemention of the Euler FD scheme.
 
-#include "include/BusinessLogic/Models/FiniteDifferenceMethods/EulerFdm.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/EulerFdm.hpp"
 #include <iostream>
 
 // Default Constructor

@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for European option class
 
-#include "EuropeanPricer.hpp"
+#include "BusinessLogic/Pricers/EuropeanPricer.hpp"
 
 // Argument Constructor
 EuropeanPricer::EuropeanPricer(const Payoff& payoff, const Discount& discounter) 

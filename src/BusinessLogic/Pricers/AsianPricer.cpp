@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for Asian option class
 
-#include "AsianPricer.hpp"
+#include "BusinessLogic/Pricers/AsianPricer.hpp"
 
 // Argument Constructor
 AsianPricer::AsianPricer(const Payoff& payoff, const Discount& discounter)

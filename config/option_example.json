@@ -1,0 +1,114 @@
+{
+  "Mediators": ["MonteCarlo"] 
+  "simulation": {
+    "nsim": 1000000,
+    "builder_choice": 1,
+    "execution_mode": "openmp"
+  },
+  "fdms": {
+	"DerivativeFree",
+	"MilsteinFdm"
+  },
+  "sdes": {
+	"GBM"
+  },
+   "rngs": {
+	"MersenneTwister"
+  },
+  "options": [
+    {
+      "name": "Batch1_Call",
+      "strike": 65.0,
+      "expiration": 0.25,
+      "volatility": 0.30,
+      "dividend": 0.0,
+      "optionType": 1,
+      "interestRate": 0.08,
+      "beta": 1.0,
+      "initialPrice": 60.0
+    },
+    {
+      "name": "Batch1_Put",
+      "strike": 65.0,
+      "expiration": 0.25,
+      "volatility": 0.30,
+      "dividend": 0.0,
+      "optionType": -1,
+      "interestRate": 0.08,
+      "beta": 1.0,
+      "initialPrice": 60.0
+    },
+    {
+      "name": "Batch2_Call",
+      "strike": 100.0,
+      "expiration": 1.0,
+      "volatility": 0.20,
+      "dividend": 0.0,
+      "optionType": 1,
+      "interestRate": 0.0,
+      "beta": 1.0,
+      "initialPrice": 100.0
+    },
+    {
+      "name": "Batch2_Put",
+      "strike": 100.0,
+      "expiration": 1.0,
+      "volatility": 0.20,
+      "dividend": 0.0,
+      "optionType": -1,
+      "interestRate": 0.0,
+      "beta": 1.0,
+      "initialPrice": 100.0
+    },
+    {
+      "name": "Batch3_Call",
+      "strike": 10.0,
+      "expiration": 1.0,
+      "volatility": 0.50,
+      "dividend": 0.0,
+      "optionType": 1,
+      "interestRate": 0.12,
+      "beta": 1.0,
+      "initialPrice": 5.0
+    },
+    {
+      "name": "Batch3_Put",
+      "strike": 10.0,
+      "expiration": 1.0,
+      "volatility": 0.50,
+      "dividend": 0.0,
+      "optionType": -1,
+      "interestRate": 0.12,
+      "beta": 1.0,
+      "initialPrice": 5.0
+    },
+    {
+      "name": "Batch4_Call",
+      "strike": 100.0,
+      "expiration": 30.0,
+      "volatility": 0.30,
+      "dividend": 0.0,
+      "optionType": 1,
+      "interestRate": 0.08,
+      "beta": 1.0,
+      "initialPrice": 100.0
+    },
+    {
+      "name": "Batch4_Put",
+      "strike": 100.0,
+      "expiration": 30.0,
+      "volatility": 0.30,
+      "dividend": 0.0,
+      "optionType": -1,
+      "interestRate": 0.08,
+      "beta": 1.0,
+      "initialPrice": 100.0
+    }
+  ],
+  "pricers": [
+    "EuropeanPricer",
+    "AsianPricer",
+    "BarrierPricer",
+    "BrownianBridgePricer"
+  ]
+}

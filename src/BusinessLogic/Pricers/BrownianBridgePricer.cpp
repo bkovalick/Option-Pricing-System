@@ -1,7 +1,7 @@
 // Author: Ben Kovalick
 // Purpose: Source file for the Brownian Bridge option class.
 
-#include "BrownianBridgePricer.hpp"
+#include "BusinessLogic/Pricers/BrownianBridgePricer.hpp"
 
 // Argument Constructor
 BrownianBridgePricer::BrownianBridgePricer(const Payoff& payoff, const Discount& discounter,

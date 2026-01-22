@@ -4,9 +4,11 @@
 #ifndef DerivativeFree_HPP
 #define DerivativeFree_HPP
 
-#include "FdmBase.hpp"
-#include "Sde.hpp"
+#include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include <memory>
+
+
 
 class DerivativeFree : public FdmBase
 {
@@ -19,7 +21,7 @@ public:
 	virtual ~DerivativeFree(); // Destructor
 
 	// Concrete implementation of the advance function
-	double advance(double xn, double tn, double dt, double normalVar, double normalVar2);
+	double advance(double xn, double tn, double dt, double normalVar, double normalVar2) override;
 };
 
 #endif // !DerivativeFree_HPP

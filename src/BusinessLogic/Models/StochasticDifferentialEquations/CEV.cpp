@@ -1,10 +1,11 @@
 // Author: Ben Kovalick
 // Purpose: Source file for Geometric Brownian Motion Class.
 
-#include "include/BusinessLogic/Models/StochasticDifferentialEquations/CEV.hpp"
+#include "BusinessLogic/Models/StochasticDifferentialEquations/CEV.hpp"
 
 // Default Constructor
 CEV::CEV()
+	: mu(0.0), vol(0.0), d(0.0), ic(0.0), exp(0.0), b(0.0)
 {}
 
 // Argument Constructor
