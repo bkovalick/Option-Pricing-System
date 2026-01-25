@@ -9,10 +9,8 @@ using namespace Concurrency;
 
 MonteCarloMediator::MonteCarloMediator() : NSim(10000)
 {
-	// Default constructor
 }
 
-// Argument Constructor
 MonteCarloMediator::MonteCarloMediator(std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> parts,
 	int numberSimulations) : NSim(numberSimulations)
 {
@@ -26,53 +24,37 @@ MonteCarloMediator::~MonteCarloMediator()
 {
 }
 
-void MonteCarloMediator::configure(const SimulationConfig& request)
+void MonteCarloMediator::connectPricers(const std::shared_ptr<Pricer>& pricer, int slot)
 {
-	//sde_ = std::make_shared<GBM>();
-	//fdm_ = std::make_shared<FdmBase>();
-	//rng_ = std::make_shared<>();
-	//res.resize(fdm_->NT + 1);
-	// Request will be a json or domain model object, perhaps a list of requests?
-	// The idea is simple, it will create sde, fdm, rng based on the request
-	
-	//if (request == "start")
-	//{
-	//	start(); // Start the path generation
-	//}
-	//else
-	//{
-	//	throw std::invalid_argument("Unknown request: " + request);
-	//}
+	path.connect(slot, std::bind(&Pricer::ProcessPath, pricer, std::placeholders::_1));
+	finish.connect(slot, std::bind(&Pricer::PostProcess, pricer));
 }
 
-
-// Path generation function
 void MonteCarloMediator::start()
 {
 	double VOld, VNew;
 	std::shared_future<double> VNew2;
 
 	for (long i = 1; i <= NSim; ++i)
-	{	// Calc a path at each iteration
+	{
 
 		if ((i / 5000) * 5000 == i)
-		{ // Give status after a given numbers of iterations
+		{
 			std::cout << i << std::endl;
 		}
-
-		// Single-Threaded Solution
+		
 		VOld = sde_->InitialCondition(); res[0] = VOld;
 		for (unsigned int n = 1; n < res.size(); n++)
-		{ // Compute the solution at level n+l
+		{
 			VNew = fdm_->advance(VOld, fdm_->meshArray[n - 1], fdm_->k, rng_->gen(), rng_->gen());
 			res[n] = VNew; VOld = VNew;
 		}
-		// Send path data to the pricers
+
 		path(res);
 	}
 	
-	finish(); // Signal to pricers to finish up.
-	disconnect(); // Disconnect signals from their slots.
+	finish();
+	disconnect();
 }
 
 // MC simulation using OpenMP for parallelization 

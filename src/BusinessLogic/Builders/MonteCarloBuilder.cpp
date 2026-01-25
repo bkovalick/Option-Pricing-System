@@ -18,9 +18,9 @@ MonteCarloBuilder::MonteCarloBuilder(const OptionData& optData)
 	beta = optData.b;
 }
 
-// Destructor
-MonteCarloBuilder::~MonteCarloBuilder()
-{}
+//// Destructor
+//MonteCarloBuilder::~MonteCarloBuilder()
+//{}
 
 // Parts initialised from the outside
 std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FDM>, std::shared_ptr<Rng>> 

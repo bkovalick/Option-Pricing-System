@@ -8,6 +8,8 @@
 #include <functional>
 #include <vector>
 
+class Mediator;
+
 // Function wrappers for the option payoff and discounting functions.
 using Payoff = std::function<double(double)>;
 using Discount = std::function<double()>;

@@ -27,6 +27,7 @@ struct SimulationConfig
     MediatorType mediatorType;
     ExecutionMode executionMode;
     int numSimulations;
+	int numTimesteps;
     
     // Option configurations
     std::vector<OptionData> options;

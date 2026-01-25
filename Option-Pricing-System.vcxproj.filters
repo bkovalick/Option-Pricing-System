@@ -93,6 +93,21 @@
     <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\FdmFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp">
@@ -191,5 +206,29 @@
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\PricerFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\FdmFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Results\SimulationResults.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Makefile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

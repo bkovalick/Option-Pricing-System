@@ -12,7 +12,7 @@
 
 class PricerFactory {
 public:
-	static std::shared_ptr<Pricer> createPricer(std::string& pricerType, const OptionData& opt);
+	static std::shared_ptr<Pricer> createPricer(const std::string& pricerType, const OptionData& opt);
 };
 #endif
 

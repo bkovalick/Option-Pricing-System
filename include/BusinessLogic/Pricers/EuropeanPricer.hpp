@@ -5,7 +5,6 @@
 #define EuropeanPricer_HPP
 
 #include "Pricer.hpp"
-
 #include <vector>
 
 class EuropeanPricer : public Pricer
