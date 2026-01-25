@@ -24,7 +24,7 @@ struct SimulationInstance
     std::string sde_;
     std::string fdm_;
     std::string rng_;
-    std::string optionName_;  // Add option name
+    std::string optionName_;
 
     SimulationInstance(int instanceId, const std::string& sde,
         const std::string& fdm, const std::string& rng, const std::string& optionName)
@@ -43,11 +43,10 @@ private:
     SimulationConfig config_;
     std::vector<SimulationInstance> simulationInstances_;
     std::vector<OptionData> options_;
-    SimulationResultsContainer results_;  // ✅ Add results container
+    SimulationResultsContainer results_;
 
     void initializeOptions();
     void buildMediators();
-    void captureResults();  // ✅ New method to extract results
 
 public:
     explicit SimulationOrchestrator(const SimulationConfig& config);
@@ -60,16 +59,13 @@ public:
     SimulationOrchestrator& operator=(SimulationOrchestrator&&) = default;
 
     void run();
-    void runWithMode(ExecutionMode mode);
     
     void printConfiguration() const;
     void printResults() const;
     void printComparisonTable() const;
-    void printDetailedResults() const;
     
     // Export results
     void exportToCSV(const std::string& filename) const;
-    void exportToJSON(const std::string& filename) const;
     
     // Access results
     const SimulationResultsContainer& getResults() const { return results_; }
