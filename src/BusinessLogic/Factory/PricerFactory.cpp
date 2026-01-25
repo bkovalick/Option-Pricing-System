@@ -1,18 +1,22 @@
 #include "BusinessLogic/Factory/PricerFactory.hpp"
 
 std::shared_ptr<Pricer> PricerFactory::createPricer(const std::string& pricerType, const OptionData& opt) {
-	auto discounter = [&opt]() { return std::exp(-opt.r * opt.T); };
+	// Create payoff function - binds to the option's payoff method
+	auto payoff = std::bind(&OptionData::myPayOffFunction, opt, std::placeholders::_1);
+
+	// Create discounter - captures option parameters by value
+	auto discounter = [r = opt.r, T = opt.T]() {
+		return std::exp(-r * T);
+	};
+
 	if (pricerType == "EuropeanPricer") {
-		return std::make_shared<EuropeanPricer>((std::bind(&OptionData::myPayOffFunction, 
-			opt, std::placeholders::_1), discounter));
+		return std::make_shared<EuropeanPricer>(payoff, discounter);
 	}
 	else if (pricerType == "AsianPricer") {
-		return std::make_shared<AsianPricer>((std::bind(&OptionData::myPayOffFunction,
-			opt, std::placeholders::_1), discounter));
+		return std::make_shared<AsianPricer>(payoff, discounter);
 	}
 	else if (pricerType == "BarrierPricer") {
-		return std::make_shared<BarrierPricer>((std::bind(&OptionData::myPayOffFunction,
-			opt, std::placeholders::_1), discounter));
+		return std::make_shared<BarrierPricer>(payoff, discounter);
 	}
 	// special case needs separate handling
 	//else if (pricerType == "BrownianBridgePricer") {

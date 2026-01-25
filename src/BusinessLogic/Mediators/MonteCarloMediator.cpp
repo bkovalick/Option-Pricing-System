@@ -24,7 +24,7 @@ MonteCarloMediator::~MonteCarloMediator()
 {
 }
 
-void MonteCarloMediator::connectPricers(std::shared_ptr<Pricer>& pricer, int slot)
+void MonteCarloMediator::connectPricers(const std::shared_ptr<Pricer>& pricer, int slot)
 {
 	path.connect(slot, std::bind(&Pricer::ProcessPath, pricer, std::placeholders::_1));
 	finish.connect(slot, std::bind(&Pricer::PostProcess, pricer));

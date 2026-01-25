@@ -44,10 +44,10 @@ public:
 		int numberSimulations);
 	virtual ~MonteCarloMediator();
 
-	void connectPricers(std::shared_ptr<Pricer>& pricer, int slot) override;
-	void start(); 
-	void startPPL();
-	void startOpenMP();
+	void connectPricers(const std::shared_ptr<Pricer>& pricer, int slot) override;
+	void start() override;
+	void startPPL() override;
+	void startOpenMP() override;
 	void disconnect();
 	PathEvent<std::vector<double>> path;
 	EndOfSimulation finish;

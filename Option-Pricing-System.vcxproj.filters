@@ -96,7 +96,16 @@
     <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Orchestrator\PricingOrchestrator.cpp">
+    <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\FdmFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,7 +206,19 @@
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Orchestrator\PricingOrchestrator.hpp">
+    <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\PricerFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\FdmFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
