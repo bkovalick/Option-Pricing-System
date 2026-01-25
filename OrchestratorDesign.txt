@@ -1,0 +1,689 @@
+================================================================================
+PRICING ORCHESTRATOR - COMPLETE IMPLEMENTATION
+Cartesian Product of SDE × FDM × RNG Combinations
+================================================================================
+
+OVERVIEW
+--------
+This implementation creates a mediator instance for every combination of:
+- Stochastic Differential Equations (SDEs): GBM, CEV, etc.
+- Finite Difference Methods (FDMs): Euler, Milstein, Exact, etc.
+- Random Number Generators (RNGs): MersenneTwister, BoxMuller, etc.
+
+For example, with 2 SDEs, 3 FDMs, and 2 RNGs, you get 2×3×2 = 12 mediators.
+
+================================================================================
+FILE 1: include\BusinessLogic\Orchestrator\PricingOrchestrator.hpp
+================================================================================
+
+#ifndef PricingOrchestrator_HPP
+#define PricingOrchestrator_HPP
+
+#include <memory>
+#include <vector>
+#include <tuple>
+#include <string>
+#include <iostream>
+
+#include <Core/Configuration/SimulationConfig.hpp>
+#include <BusinessLogic/Mediators/Mediator.hpp>
+#include <BusinessLogic/Pricers/Pricer.hpp>
+#include <Core/Domain/OptionData.hpp>
+
+// Forward declarations for Monte Carlo components
+class Sde;
+class FdmBase;
+class Rng;
+
+// Structure to hold a complete simulation configuration
+struct SimulationInstance
+{
+	std::unique_ptr<Mediator> mediator;
+	std::vector<std::shared_ptr<Pricer>> pricers;
+	std::string sdeType;
+	std::string fdmType;
+	std::string rngType;
+	int instanceId;
+	
+	SimulationInstance(int id, const std::string& sde, const std::string& fdm, const std::string& rng)
+		: instanceId(id), sdeType(sde), fdmType(fdm), rngType(rng) {}
+};
+
+class PricingOrchestrator
+{
+private:
+	SimulationConfig config_;
+	std::vector<SimulationInstance> simulations_;
+	std::vector<OptionData> options_;
+	
+	// Component factories
+	std::shared_ptr<Sde> createSde(const std::string& sdeType, const OptionData& option);
+	std::shared_ptr<FdmBase> createFdm(const std::string& fdmType, std::shared_ptr<Sde> sde, int numTimeSteps);
+	std::shared_ptr<Rng> createRng(const std::string& rngType);
+	
+	// Private helper methods
+	void initializeComponents();
+	void buildAllMediators();
+	void setupFiniteDifferenceMethods();
+	void setupStochasticDifferentialEquations();
+	void setupRandomNumberGenerators();
+	void setupPricers();
+	void connectPricers();
+	void validateConfiguration() const;
+
+public:
+	explicit PricingOrchestrator(const SimulationConfig& config);
+	~PricingOrchestrator() = default;
+
+	// Delete copy operations
+	PricingOrchestrator(const PricingOrchestrator&) = delete;
+	PricingOrchestrator& operator=(const PricingOrchestrator&) = delete;
+
+	// Allow move operations
+	PricingOrchestrator(PricingOrchestrator&&) = default;
+	PricingOrchestrator& operator=(PricingOrchestrator&&) = default;
+
+	// Main orchestration methods
+	void runAll();
+	void runAllWithMode(ExecutionMode mode);
+	void runSimulation(int instanceId);
+	
+	// Results and diagnostics
+	void printResults() const;
+	void printConfiguration() const;
+	void printSimulationSummary() const;
+	
+	// Getters
+	const SimulationConfig& getConfig() const { return config_; }
+	size_t getSimulationCount() const { return simulations_.size(); }
+	const SimulationInstance& getSimulation(int instanceId) const;
+};
+
+#endif
+
+================================================================================
+FILE 2: src\BusinessLogic\Orchestrator\PricingOrchestrator.cpp
+================================================================================
+
+#include "BusinessLogic/Orchestrator/PricingOrchestrator.hpp"
+#include <BusinessLogic/Factory/MediatorFactory.hpp>
+#include <BusinessLogic/Factory/PricerFactory.hpp>
+#include <BusinessLogic/Builders/MonteCarloBuilder.hpp>
+#include <BusinessLogic/Mediators/MonteCarloMediator.hpp>
+
+// Component includes
+#include <BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp>
+#include <BusinessLogic/Models/StochasticDifferentialEquations/CEV.hpp>
+#include <BusinessLogic/Models/FiniteDifferenceMethods/EulerFdm.hpp>
+#include <BusinessLogic/Models/FiniteDifferenceMethods/MilsteinFdm.hpp>
+#include <BusinessLogic/Models/FiniteDifferenceMethods/ExactFdm.hpp>
+#include <BusinessLogic/Models/RandomNumberGenerators/MersenneTwister.hpp>
+#include <BusinessLogic/Models/RandomNumberGenerators/BoxMuller.hpp>
+
+#include <stdexcept>
+#include <chrono>
+
+PricingOrchestrator::PricingOrchestrator(const SimulationConfig& config)
+	: config_(config)
+{
+	validateConfiguration();
+	initializeComponents();
+	buildAllMediators();
+	setupPricers();
+	connectPricers();
+}
+
+void PricingOrchestrator::validateConfiguration() const
+{
+	if (!config_.isValid()) {
+		throw std::invalid_argument("Invalid simulation configuration");
+	}
+	
+	if (config_.mediatorType == MediatorType::MonteCarlo) {
+		if (config_.sdeTypes.empty() || config_.fdmTypes.empty() || config_.rngTypes.empty()) {
+			throw std::invalid_argument("Monte Carlo mediator requires SDE, FDM, and RNG types");
+		}
+	}
+}
+
+void PricingOrchestrator::initializeComponents()
+{
+	std::cout << "=== Initializing Pricing Orchestrator ===" << std::endl;
+	std::cout << "Mediator Type: " << static_cast<int>(config_.mediatorType) << std::endl;
+	std::cout << "Execution Mode: " << static_cast<int>(config_.executionMode) << std::endl;
+	std::cout << "Number of Simulations per Mediator: " << config_.numSimulations << std::endl;
+	
+	// Store options
+	options_.clear();
+	for (const auto& opt : config_.options) {
+		std::cout << "  - Option: " << opt.OptionName << std::endl;
+		options_.push_back(opt);
+	}
+	
+	// Calculate total combinations
+	if (config_.mediatorType == MediatorType::MonteCarlo) {
+		size_t totalCombinations = config_.sdeTypes.size() * 
+		                          config_.fdmTypes.size() * 
+		                          config_.rngTypes.size();
+		std::cout << "\nTotal mediator combinations to create: " << totalCombinations << std::endl;
+		std::cout << "  SDEs: " << config_.sdeTypes.size() << std::endl;
+		std::cout << "  FDMs: " << config_.fdmTypes.size() << std::endl;
+		std::cout << "  RNGs: " << config_.rngTypes.size() << std::endl;
+	}
+}
+
+void PricingOrchestrator::buildAllMediators()
+{
+	std::cout << "\n=== Building All Mediators ===" << std::endl;
+	
+	simulations_.clear();
+	int instanceId = 0;
+	
+	if (config_.mediatorType == MediatorType::MonteCarlo) {
+		// Create a mediator for every combination of SDE, FDM, and RNG
+		for (const auto& sdeType : config_.sdeTypes) {
+			for (const auto& fdmType : config_.fdmTypes) {
+				for (const auto& rngType : config_.rngTypes) {
+					std::cout << "\nCreating simulation instance " << instanceId << ":" << std::endl;
+					std::cout << "  SDE: " << sdeType << ", FDM: " << fdmType << ", RNG: " << rngType << std::endl;
+					
+					// Create simulation instance
+					SimulationInstance instance(instanceId, sdeType, fdmType, rngType);
+					
+					// Use first option for component creation
+					const auto& firstOption = config_.options[0];
+					
+					// Create components
+					auto sde = createSde(sdeType, firstOption);
+					auto fdm = createFdm(fdmType, sde, 500); // TODO: Get from config
+					auto rng = createRng(rngType);
+					
+					if (!sde || !fdm || !rng) {
+						std::cerr << "  Warning: Failed to create components for instance " << instanceId << std::endl;
+						continue;
+					}
+					
+					// Create mediator with these components
+					auto parts = std::make_tuple(sde, fdm, rng);
+					instance.mediator = std::make_unique<MonteCarloMediator>(parts, config_.numSimulations);
+					
+					std::cout << "  Successfully created mediator instance " << instanceId << std::endl;
+					
+					simulations_.push_back(std::move(instance));
+					instanceId++;
+				}
+			}
+		}
+	}
+	else {
+		// For other mediator types (PDE, BinomialTree), create single instance
+		SimulationInstance instance(instanceId, "", "", "");
+		instance.mediator = MediatorFactory::createMediator(config_.mediatorType);
+		instance.mediator->configure(config_);
+		simulations_.push_back(std::move(instance));
+	}
+	
+	std::cout << "\nTotal simulation instances created: " << simulations_.size() << std::endl;
+}
+
+std::shared_ptr<Sde> PricingOrchestrator::createSde(const std::string& sdeType, const OptionData& option)
+{
+	if (sdeType == "GBM") {
+		return std::make_shared<GBM>(option.r, option.sig, option.D, option.IC, option.T);
+	}
+	else if (sdeType == "CEV") {
+		return std::make_shared<CEV>(option.r, option.sig, option.D, option.IC, option.T, option.b);
+	}
+	// Add more SDE types as needed
+	
+	std::cerr << "Unknown SDE type: " << sdeType << std::endl;
+	return nullptr;
+}
+
+std::shared_ptr<FdmBase> PricingOrchestrator::createFdm(const std::string& fdmType, std::shared_ptr<Sde> sde, int numTimeSteps)
+{
+	if (fdmType == "Euler") {
+		return std::make_shared<EulerFdm>(sde, numTimeSteps);
+	}
+	else if (fdmType == "Milstein") {
+		return std::make_shared<MilsteinFdm>(sde, numTimeSteps);
+	}
+	else if (fdmType == "Exact") {
+		return std::make_shared<ExactFdm>(sde, numTimeSteps);
+	}
+	// Add more FDM types as needed
+	
+	std::cerr << "Unknown FDM type: " << fdmType << std::endl;
+	return nullptr;
+}
+
+std::shared_ptr<Rng> PricingOrchestrator::createRng(const std::string& rngType)
+{
+	if (rngType == "MersenneTwister") {
+		return std::make_shared<MersenneTwister>();
+	}
+	else if (rngType == "BoxMuller") {
+		return std::make_shared<BoxMuller>();
+	}
+	// Add more RNG types as needed
+	
+	std::cerr << "Unknown RNG type: " << rngType << std::endl;
+	return nullptr;
+}
+
+void PricingOrchestrator::setupPricers()
+{
+	std::cout << "\n=== Setting Up Pricers ===" << std::endl;
+	
+	// Create pricers for each simulation instance
+	for (auto& simulation : simulations_) {
+		std::cout << "\nSetting up pricers for simulation instance " << simulation.instanceId << std::endl;
+		
+		// Create pricers for each (option, pricerType) combination
+		for (const auto& option : config_.options) {
+			for (const auto& pricerType : config_.pricerTypes) {
+				auto pricer = PricerFactory::createPricer(pricerType, option);
+				
+				if (!pricer) {
+					std::cerr << "  Warning: Failed to create pricer: " << pricerType << std::endl;
+					continue;
+				}
+				
+				simulation.pricers.push_back(pricer);
+				std::cout << "  - Created " << pricerType << " for " << option.OptionName << std::endl;
+			}
+		}
+		
+		std::cout << "  Total pricers for instance " << simulation.instanceId << ": " 
+		          << simulation.pricers.size() << std::endl;
+	}
+}
+
+void PricingOrchestrator::connectPricers()
+{
+	std::cout << "\n=== Connecting Pricers ===" << std::endl;
+	
+	for (auto& simulation : simulations_) {
+		if (!simulation.mediator) {
+			std::cerr << "Warning: Simulation instance " << simulation.instanceId 
+			          << " has no mediator" << std::endl;
+			continue;
+		}
+		
+		if (simulation.pricers.empty()) {
+			std::cerr << "Warning: Simulation instance " << simulation.instanceId 
+			          << " has no pricers" << std::endl;
+			continue;
+		}
+		
+		std::cout << "Connecting pricers for simulation instance " << simulation.instanceId << std::endl;
+		
+		int slot = 0;
+		for (const auto& pricer : simulation.pricers) {
+			simulation.mediator->connectPricer(pricer, slot);
+			slot++;
+		}
+		
+		std::cout << "  Connected " << slot << " pricers" << std::endl;
+	}
+}
+
+void PricingOrchestrator::runAll()
+{
+	std::cout << "\n=== Running All Simulations ===" << std::endl;
+	
+	auto overallStart = std::chrono::high_resolution_clock::now();
+	
+	for (auto& simulation : simulations_) {
+		std::cout << "\n--- Running Simulation Instance " << simulation.instanceId << " ---" << std::endl;
+		std::cout << "Configuration: SDE=" << simulation.sdeType 
+		          << ", FDM=" << simulation.fdmType 
+		          << ", RNG=" << simulation.rngType << std::endl;
+		
+		auto start = std::chrono::high_resolution_clock::now();
+		
+		// Run based on execution mode
+		switch (config_.executionMode) {
+			case ExecutionMode::SingleThreaded:
+				simulation.mediator->start();
+				break;
+			case ExecutionMode::OpenMP:
+				simulation.mediator->startOpenMP();
+				break;
+			case ExecutionMode::PPL:
+				simulation.mediator->startPPL();
+				break;
+		}
+		
+		auto end = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = end - start;
+		
+		std::cout << "Instance " << simulation.instanceId << " completed in " 
+		          << elapsed.count() << " seconds" << std::endl;
+	}
+	
+	auto overallEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> totalElapsed = overallEnd - overallStart;
+	
+	std::cout << "\n=== All Simulations Complete ===" << std::endl;
+	std::cout << "Total execution time: " << totalElapsed.count() << " seconds" << std::endl;
+	std::cout << "Average time per simulation: " 
+	          << (totalElapsed.count() / simulations_.size()) << " seconds" << std::endl;
+}
+
+void PricingOrchestrator::runAllWithMode(ExecutionMode mode)
+{
+	std::cout << "\n=== Running All Simulations with Mode Override ===" << std::endl;
+	
+	auto overallStart = std::chrono::high_resolution_clock::now();
+	
+	for (auto& simulation : simulations_) {
+		std::cout << "\n--- Running Simulation Instance " << simulation.instanceId << " ---" << std::endl;
+		
+		auto start = std::chrono::high_resolution_clock::now();
+		
+		switch (mode) {
+			case ExecutionMode::SingleThreaded:
+				simulation.mediator->start();
+				break;
+			case ExecutionMode::OpenMP:
+				simulation.mediator->startOpenMP();
+				break;
+			case ExecutionMode::PPL:
+				simulation.mediator->startPPL();
+				break;
+		}
+		
+		auto end = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = end - start;
+		
+		std::cout << "Instance " << simulation.instanceId << " completed in " 
+		          << elapsed.count() << " seconds" << std::endl;
+	}
+	
+	auto overallEnd = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> totalElapsed = overallEnd - overallStart;
+	
+	std::cout << "\n=== All Simulations Complete ===" << std::endl;
+	std::cout << "Total execution time: " << totalElapsed.count() << " seconds" << std::endl;
+}
+
+void PricingOrchestrator::runSimulation(int instanceId)
+{
+	if (instanceId < 0 || instanceId >= static_cast<int>(simulations_.size())) {
+		throw std::out_of_range("Invalid simulation instance ID");
+	}
+	
+	auto& simulation = simulations_[instanceId];
+	
+	std::cout << "\n--- Running Simulation Instance " << instanceId << " ---" << std::endl;
+	std::cout << "Configuration: SDE=" << simulation.sdeType 
+	          << ", FDM=" << simulation.fdmType 
+	          << ", RNG=" << simulation.rngType << std::endl;
+	
+	auto start = std::chrono::high_resolution_clock::now();
+	
+	switch (config_.executionMode) {
+		case ExecutionMode::SingleThreaded:
+			simulation.mediator->start();
+			break;
+		case ExecutionMode::OpenMP:
+			simulation.mediator->startOpenMP();
+			break;
+		case ExecutionMode::PPL:
+			simulation.mediator->startPPL();
+			break;
+	}
+	
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = end - start;
+	
+	std::cout << "Instance " << instanceId << " completed in " 
+	          << elapsed.count() << " seconds" << std::endl;
+}
+
+void PricingOrchestrator::printResults() const
+{
+	std::cout << "\n=== Pricing Results ===" << std::endl;
+	
+	for (const auto& simulation : simulations_) {
+		std::cout << "\n--- Simulation Instance " << simulation.instanceId << " ---" << std::endl;
+		std::cout << "Configuration: SDE=" << simulation.sdeType 
+		          << ", FDM=" << simulation.fdmType 
+		          << ", RNG=" << simulation.rngType << std::endl;
+		
+		for (size_t i = 0; i < simulation.pricers.size(); ++i) {
+			std::cout << "  Pricer " << i << " results:" << std::endl;
+			// Assuming Pricer has a printResults method
+			// simulation.pricers[i]->printResults();
+		}
+	}
+}
+
+void PricingOrchestrator::printConfiguration() const
+{
+	std::cout << "\n=== Orchestrator Configuration ===" << std::endl;
+	std::cout << "Number of Simulation Instances: " << simulations_.size() << std::endl;
+	std::cout << "Number of Options: " << options_.size() << std::endl;
+	std::cout << "Simulations per Mediator: " << config_.numSimulations << std::endl;
+	
+	printSimulationSummary();
+}
+
+void PricingOrchestrator::printSimulationSummary() const
+{
+	std::cout << "\n=== Simulation Instances Summary ===" << std::endl;
+	
+	for (const auto& simulation : simulations_) {
+		std::cout << "Instance " << simulation.instanceId << ": "
+		          << "SDE=" << simulation.sdeType 
+		          << ", FDM=" << simulation.fdmType 
+		          << ", RNG=" << simulation.rngType
+		          << ", Pricers=" << simulation.pricers.size() << std::endl;
+	}
+}
+
+const SimulationInstance& PricingOrchestrator::getSimulation(int instanceId) const
+{
+	if (instanceId < 0 || instanceId >= static_cast<int>(simulations_.size())) {
+		throw std::out_of_range("Invalid simulation instance ID");
+	}
+	return simulations_[instanceId];
+}
+
+================================================================================
+FILE 3: Example config.json
+================================================================================
+
+{
+  "mediator": {
+    "type": "MonteCarlo",
+    "executionMode": "openmp",
+    "numSimulations": 100000,
+    "builderChoice": 1
+  },
+  "options": [
+    {
+      "name": "EuropeanCall",
+      "strike": 100.0,
+      "expiration": 1.0,
+      "volatility": 0.2,
+      "dividend": 0.0,
+      "optionType": 1,
+      "interestRate": 0.05,
+      "beta": 1.0,
+      "initialPrice": 100.0
+    }
+  ],
+  "pricers": ["European", "Asian"],
+  "sdes": ["GBM", "CEV"],
+  "fdms": ["Euler", "Milstein", "Exact"],
+  "rngs": ["MersenneTwister", "BoxMuller"]
+}
+
+This configuration creates: 2 SDEs × 3 FDMs × 2 RNGs = 12 mediator instances
+
+================================================================================
+FILE 4: Example Program.cpp Usage
+================================================================================
+
+#include <iostream>
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+#include <Core/Configuration/SimulationConfig.hpp>
+#include <BusinessLogic/Orchestrator/PricingOrchestrator.hpp>
+
+int main()
+{
+	try {
+		// Load configuration from JSON
+		std::ifstream configFile("config.json");
+		if (!configFile.is_open()) {
+			std::cerr << "Error: Could not open config.json" << std::endl;
+			return 1;
+		}
+
+		nlohmann::json configJson;
+		configFile >> configJson;
+		configFile.close();
+
+		// Create configuration from JSON
+		auto config = SimulationConfig::fromJson(configJson);
+		
+		// Create orchestrator - builds all mediator combinations
+		PricingOrchestrator orchestrator(config);
+		
+		// Print what was created
+		orchestrator.printConfiguration();
+		
+		// Run ALL simulations (all combinations)
+		orchestrator.runAll();
+		
+		// Print results from all instances
+		orchestrator.printResults();
+		
+		// Optional: Run a specific simulation instance
+		// orchestrator.runSimulation(5);  // Run instance #5 only
+		
+		// Optional: Run all with different execution mode
+		// orchestrator.runAllWithMode(ExecutionMode::PPL);
+		
+	}
+	catch (const std::exception& ex) {
+		std::cerr << "Error: " << ex.what() << std::endl;
+		return 1;
+	}
+	
+	return 0;
+}
+
+================================================================================
+KEY CONCEPTS
+================================================================================
+
+1. CARTESIAN PRODUCT
+   - Creates all combinations: SDE₁×FDM₁×RNG₁, SDE₁×FDM₁×RNG₂, etc.
+   - Each combination gets its own mediator instance
+   - Enables comprehensive comparison of methods
+
+2. SIMULATION INSTANCE
+   - Container for one complete simulation setup
+   - Holds: mediator, pricers, component types, ID
+   - Can be run independently or as part of batch
+
+3. COMPONENT FACTORIES
+   - createSde(): Creates SDE from string type name
+   - createFdm(): Creates FDM from string type name
+   - createRng(): Creates RNG from string type name
+   - Easily extensible for new component types
+
+4. EXECUTION MODES
+   - SingleThreaded: Sequential execution
+   - OpenMP: Parallel using OpenMP
+   - PPL: Parallel using Microsoft PPL
+
+5. FLEXIBILITY
+   - Run all simulations: runAll()
+   - Run specific instance: runSimulation(id)
+   - Override execution mode: runAllWithMode(mode)
+   - Print diagnostics at any time
+
+================================================================================
+EXAMPLE OUTPUT
+================================================================================
+
+=== Initializing Pricing Orchestrator ===
+Mediator Type: 0
+Execution Mode: 1
+Number of Simulations per Mediator: 100000
+  - Option: EuropeanCall
+
+Total mediator combinations to create: 12
+  SDEs: 2
+  FDMs: 3
+  RNGs: 2
+
+=== Building All Mediators ===
+
+Creating simulation instance 0:
+  SDE: GBM, FDM: Euler, RNG: MersenneTwister
+  Successfully created mediator instance 0
+
+Creating simulation instance 1:
+  SDE: GBM, FDM: Euler, RNG: BoxMuller
+  Successfully created mediator instance 1
+
+... (continues for all 12 combinations)
+
+Total simulation instances created: 12
+
+=== Running All Simulations ===
+
+--- Running Simulation Instance 0 ---
+Configuration: SDE=GBM, FDM=Euler, RNG=MersenneTwister
+Instance 0 completed in 2.453 seconds
+
+--- Running Simulation Instance 1 ---
+Configuration: SDE=GBM, FDM=Euler, RNG=BoxMuller
+Instance 1 completed in 2.512 seconds
+
+... (continues for all instances)
+
+=== All Simulations Complete ===
+Total execution time: 29.834 seconds
+Average time per simulation: 2.486 seconds
+
+================================================================================
+BENEFITS OF THIS DESIGN
+================================================================================
+
+1. COMPARATIVE ANALYSIS
+   - Compare GBM vs CEV side-by-side
+   - Evaluate Euler vs Milstein vs Exact accuracy
+   - Assess RNG quality differences
+
+2. PERFORMANCE TESTING
+   - Identify fastest SDE/FDM/RNG combination
+   - Benchmark execution modes
+   - Measure scaling characteristics
+
+3. VALIDATION
+   - Cross-verify results across methods
+   - Detect numerical instabilities
+   - Ensure consistency
+
+4. RESEARCH
+   - Systematic exploration of parameter space
+   - Reproducible experiments
+   - Publication-ready results
+
+5. EXTENSIBILITY
+   - Add new SDEs: just add to factory
+   - Add new FDMs: just add to factory
+   - Add new RNGs: just add to factory
+   - No changes to orchestrator logic
+
+================================================================================
+END OF DOCUMENT
+================================================================================

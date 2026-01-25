@@ -27,6 +27,58 @@
 #include "include/Core/Domain/OptionData.hpp"
 #include <Core/Configuration/SimulationConfig.hpp>
 
+// Eventually will use the orchestrator to run the program.
+//int main()
+//{
+//	try {
+//		// Load configuration from JSON
+//		std::ifstream configFile("config.json");
+//		if (!configFile.is_open()) {
+//			std::cerr << "Error: Could not open config.json" << std::endl;
+//			return 1;
+//		}
+//
+//		nlohmann::json configJson;
+//		configFile >> configJson;
+//		configFile.close();
+//
+//		// Create configuration from JSON
+//		auto config = SimulationConfig::fromJson(configJson);
+//
+//		// Create orchestrator
+//		PricingOrchestrator orchestrator(config);
+//
+//		// Print configuration
+//		orchestrator.printConfiguration();
+//
+//		// Run simulation
+//		orchestrator.run();
+//
+//		// Print results
+//		orchestrator.printResults();
+//
+//		// Example: Run again with different execution mode
+//		std::cout << "\n\n=== Running again with OpenMP ===" << std::endl;
+//		orchestrator.runWithMode(ExecutionMode::OpenMP);
+//
+//		// Example: Switch to PDE mediator
+//		// orchestrator.switchMediator(MediatorType::PDE);
+//		// orchestrator.run();
+//
+//		// Example: Add a new option dynamically
+//		// OptionData newOption("NewCall", 70.0, 0.5, 0.25, 0.0, 1, 0.05, 1.0, 65.0);
+//		// orchestrator.addOption(newOption);
+//		// orchestrator.run();
+//
+//	}
+//	catch (const std::exception& ex) {
+//		std::cerr << "Error: " << ex.what() << std::endl;
+//		return 1;
+//	}
+//
+//	return 0;
+//}
+
 
 int main()
 {
@@ -52,13 +104,13 @@ int main()
 	// Create configuration from JSON
 	auto config = SimulationConfig::fromJson(configJson);
 	auto mediator = MediatorFactory::createMediator(config.mediatorType);
-	mediator->configure(config);
-	
-	// Is this what the mediator class will do?
-	for (const auto& opt: config.options) {
-		std::cout << "Configuring option: " << opt.OptionName << std::endl;
-		options.push_back(opt);
-	}
+	//mediator->configure(config);
+	//
+	//// Is this what the mediator class will do?
+	//for (const auto& opt: config.options) {
+	//	std::cout << "Configuring option: " << opt.OptionName << std::endl;
+	//	options.push_back(opt);
+	//}
 
 	//for (const auto& pricer : config.pricerTypes) {
 	//	std::cout << "Configuring option: " << pricer << std::endl;

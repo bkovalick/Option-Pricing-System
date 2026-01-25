@@ -1,20 +1,27 @@
 {
-  "Mediators": ["MonteCarlo"] 
+  "Mediators": [ "MonteCarlo" ],
   "simulation": {
     "nsim": 1000000,
+    "timesteps": 360,
     "builder_choice": 1,
     "execution_mode": "openmp"
   },
-  "fdms": {
-	"DerivativeFree",
-	"MilsteinFdm"
-  },
-  "sdes": {
-	"GBM"
-  },
-   "rngs": {
-	"MersenneTwister"
-  },
+  "pricers": [
+    "EuropeanPricer",
+    "AsianPricer",
+    "BarrierPricer",
+    "BrownianBridgePricer"
+  ],
+  "fdms": [
+    "DerivativeFree",
+    "MilsteinFdm"
+  ],
+  "sdes": [
+    "GBM"
+  ],
+  "rngs": [
+    "MersenneTwister"
+  ],
   "options": [
     {
       "name": "Batch1_Call",
@@ -104,11 +111,5 @@
       "beta": 1.0,
       "initialPrice": 100.0
     }
-  ],
-  "pricers": [
-    "EuropeanPricer",
-    "AsianPricer",
-    "BarrierPricer",
-    "BrownianBridgePricer"
   ]
 }

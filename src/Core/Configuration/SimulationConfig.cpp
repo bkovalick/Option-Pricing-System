@@ -28,6 +28,7 @@ SimulationConfig SimulationConfig::fromJson(const json& json)
     }
     
     config.numSimulations = json["mediator"]["numSimulations"].get<int>();
+    config.numTimesteps = json["mediator"]["timesteps"].get<int>();
     config.builderChoice = json["mediator"]["builderChoice"].get<int>();
     
     // Parse options

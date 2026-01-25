@@ -12,25 +12,21 @@
 #include <future>
 #include <chrono>
 #include <thread>
+#include <boost/signals2.hpp>
+#include <ppl.h> 
+#include <omp.h>
 
 #include "BusinessLogic/Models/FiniteDifferenceMethods/FDM.hpp"
 #include "BusinessLogic/Models/FiniteDifferenceMethods/FdmBase.hpp"
 #include "BusinessLogic/Models/StochasticDifferentialEquations/Sde.hpp"
 #include "BusinessLogic/Models/RandomNumberGenerators/Rng.hpp" 
 #include "BusinessLogic/Mediators/Mediator.hpp"
-
-#include <boost/signals2.hpp>
-
-// Used for PPL Solution
-#include <ppl.h> 
-
-// Used for Open MP Solution
-#include <omp.h>
+#include <BusinessLogic/Pricers/Pricer.hpp>
 
 template <typename T>
-using PathEvent = boost::signals2::signal<void(const T& t)>; // Send a path array
+using PathEvent = boost::signals2::signal<void(const T& t)>;
 
-using EndOfSimulation = boost::signals2::signal<void()>; // No more paths
+using EndOfSimulation = boost::signals2::signal<void()>;
 
 class MonteCarloMediator : public Mediator
 {
@@ -48,7 +44,7 @@ public:
 		int numberSimulations);
 	virtual ~MonteCarloMediator();
 
-	void configure(const SimulationConfig& request) override;
+	void connectPricers(std::shared_ptr<Pricer>& pricer, int slot) override;
 	void start(); 
 	void startPPL();
 	void startOpenMP();

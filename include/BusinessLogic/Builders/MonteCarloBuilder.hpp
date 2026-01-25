@@ -48,28 +48,19 @@ private:
 	double beta;
 
 public:
-	MonteCarloBuilder(); // Default Constructor
-	MonteCarloBuilder(const OptionData& optData); // Argument Constructor
-	virtual ~MonteCarloBuilder(); // Destructor
+	MonteCarloBuilder();
+	MonteCarloBuilder(const OptionData& optData);
+	virtual ~MonteCarloBuilder() = default;
 
-	// Parts initialised from the outside
 	std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FDM>, std::shared_ptr<Rng>>
 		Parts(const std::shared_ptr<Sde>& _sde, const std::shared_ptr<FDM>& _fdm,
 		const std::shared_ptr<Rng>& _rng);
 
-	// Parts initialised from the inside
 	std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> Parts();
-
-	// Returns a pointer to an Sde
 	std::shared_ptr<Sde> getSde();
-
-	// Returns a pointer to an Fdm
 	std::shared_ptr<FdmBase> getFdm(const std::shared_ptr<Sde>& sde);
-
-	// Returns a pointer to a Rng
 	std::shared_ptr<Rng> getRng();
 
-	// Static method that implements the Builder pattern.
 	static std::tuple<std::shared_ptr<Sde>, std::shared_ptr<FdmBase>, std::shared_ptr<Rng>> 
 		ChooseBuilder(int n, const OptionData& optData);
 };

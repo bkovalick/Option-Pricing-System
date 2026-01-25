@@ -93,6 +93,12 @@
     <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Orchestrator\PricingOrchestrator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp">
@@ -191,5 +197,14 @@
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Orchestrator\PricingOrchestrator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Makefile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

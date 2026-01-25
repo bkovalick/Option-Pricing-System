@@ -2,12 +2,11 @@
 #define Mediator_HPP
 
 #include <memory>
-#include <string>
 
 class Mediator {
 public:
 	virtual ~Mediator() = default;
-	virtual void configure(const SimulationConfig& request) = 0;
+	virtual void connectPricers(std::shared_ptr<Pricer>& pricer, int slot) = 0;
 };
 
 #endif

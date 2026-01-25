@@ -126,6 +126,7 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\MediatorFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\businesslogic\models\randomnumbergenerators\MersenneTwister.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\CEV.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\GBM.cpp" />
+    <ClCompile Include="src\BusinessLogic\Orchestrator\PricingOrchestrator.cpp" />
     <ClCompile Include="src\businesslogic\pricers\AsianPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BarrierPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
@@ -176,6 +178,7 @@
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\CEV.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\GBM.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\Sde.hpp" />
+    <ClInclude Include="include\BusinessLogic\Orchestrator\PricingOrchestrator.hpp" />
     <ClInclude Include="include\businesslogic\pricers\AsianPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BarrierPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BrownianBridgePricer.hpp" />
@@ -183,6 +186,12 @@
     <ClInclude Include="include\businesslogic\pricers\Pricer.hpp" />
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp" />
     <ClInclude Include="include\core\domain\OptionData.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Makefile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
