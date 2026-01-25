@@ -1,4 +1,4 @@
-// Author: Ben Kovalick
+﻿// Author: Ben Kovalick
 // Purpose: Provides the implementation point for the MC option pricing program.
 
 #define _SCL_SECURE_NO_WARNINGS
@@ -33,7 +33,7 @@ int main()
 {
 	try {
 		// Load configuration from JSON
-		std::ifstream configFile("config.json");
+		std::ifstream configFile("config/option_example.json");
 		if (!configFile.is_open()) {
 			std::cerr << "Error: Could not open config.json" << std::endl;
 			return 1;
@@ -54,23 +54,13 @@ int main()
 
 		// Run simulation
 		orchestrator.run();
-
+		
 		// Print results
-		orchestrator.printConfiguration();
-
-		//// Example: Run again with different execution mode
-		//std::cout << "\n\n=== Running again with OpenMP ===" << std::endl;
-		//orchestrator.runWithMode(ExecutionMode::OpenMP);
-
-		// Example: Switch to PDE mediator
-		// orchestrator.switchMediator(MediatorType::PDE);
-		// orchestrator.run();
-
-		// Example: Add a new option dynamically
-		// OptionData newOption("NewCall", 70.0, 0.5, 0.25, 0.0, 1, 0.05, 1.0, 65.0);
-		// orchestrator.addOption(newOption);
-		// orchestrator.run();
-
+		orchestrator.printResults();
+		orchestrator.printComparisonTable();
+		
+		// Export to CSV
+		orchestrator.exportToCSV("results.csv");
 	}
 	catch (const std::exception& ex) {
 		std::cerr << "Error: " << ex.what() << std::endl;

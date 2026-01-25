@@ -1,16 +1,22 @@
-// Author: Ben Kovalick
+﻿// Author: Ben Kovalick
 // Purpose: Source file for Barrier option class.
 
 #include "BusinessLogic/Pricers/BarrierPricer.hpp"
 
-// Argument Constructor
+// Default Constructor - uses default barrier
 BarrierPricer::BarrierPricer(const Payoff& payoff, const Discount& discounter)
-	: Pricer(payoff, discounter)
+	: Pricer(payoff, discounter), barrier(80.0), barrierType(BarrierType::DownAndOut), rebate(0.0)
 {
-	// Stock must fall below this amount to be activated.
-	std::cout << "Please select a barrier amount: "; std::cin >> barrier;
+	price = sum = 0.0;
+	NSim = 0;
+}
 
-	price = sum = sum2 = 0.0;
+// Parameterized Constructor - specify barrier
+BarrierPricer::BarrierPricer(const Payoff& payoff, const Discount& discounter,
+                             double barrierLevel, BarrierType type, double rebateAmount)
+	: Pricer(payoff, discounter), barrier(barrierLevel), barrierType(type), rebate(rebateAmount)
+{
+	price = sum = 0.0;
 	NSim = 0;
 }
 
@@ -19,49 +25,62 @@ BarrierPricer::~BarrierPricer()
 {}
 
 // A path for each simulation draw.
-inline void BarrierPricer::ProcessPath(const std::vector<double>& t)
+void BarrierPricer::ProcessPath(const std::vector<double>& t)
 {
-	// Amount returned to the purchaser
-	double rebate = 0.0;
+	bool knocked_out = false;
 
-	bool crossed = false;
-	for (const auto& elem : t)
-	{
-		if (elem >= barrier)
-		{ // Down and out
-			crossed = true;
+	// Check barrier condition based on type
+	switch (barrierType) {
+		case BarrierType::DownAndOut:
+			// Knocked out if price falls BELOW barrier
+			for (const auto& price : t) {
+				if (price <= barrier) {
+					knocked_out = true;
+					break;
+				}
+			}
 			break;
-		}
+
+		case BarrierType::UpAndOut:
+			// Knocked out if price rises ABOVE barrier
+			for (const auto& price : t) {
+				if (price >= barrier) {
+					knocked_out = true;
+					break;
+				}
+			}
+			break;
 	}
 
-	if (crossed == false)
-	{
-		sum += m_payoff(t[t.size() - 1]);
+	if (!knocked_out) {
+		sum += m_payoff(t.back());  // Normal payoff
 	}
-	else
-	{
-		sum += rebate;
+	else {
+		sum += rebate;  // Knocked out → receive rebate
 	}
-	
+
 	NSim++;
 }
 
 // Discounting
-inline double BarrierPricer::DiscountFactor()
+double BarrierPricer::DiscountFactor()
 {
 	return m_discounter();
 }
 
 // Responsible for post simulation calculations
-inline void BarrierPricer::PostProcess()
+void BarrierPricer::PostProcess()
 {
-	std::cout << "Computing Barrier Option Price: " << std::endl;
+	std::cout << "Computing Barrier Option Price:" << std::endl;
+	std::cout << "  Barrier Level: " << barrier << std::endl;
+	std::cout << "  Type: " << (barrierType == BarrierType::DownAndOut ? "Down-and-Out" : "Up-and-Out") << std::endl;
+
 	price = DiscountFactor() * sum / NSim;
-	std::cout << "Price: {0}, {1} " << price << ", " << NSim << std::endl;
+	std::cout << "  Price: " << price << " (from " << NSim << " simulations)" << std::endl;
 }
 
 // Returns the option price
-inline double BarrierPricer::Price()
+double BarrierPricer::Price()
 {
 	return price;
 }

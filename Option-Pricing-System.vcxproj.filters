@@ -221,6 +221,9 @@
     <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Results\SimulationResults.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Makefile.txt" />

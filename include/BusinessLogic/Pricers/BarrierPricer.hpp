@@ -5,27 +5,43 @@
 #define BarrierPricer_HPP
 
 #include "Pricer.hpp"
-
 #include <vector>
-#include <iostream>
-#include <algorithm>
+
+enum class BarrierType {
+    DownAndOut,   // Knocked out if price falls below barrier
+    UpAndOut      // Knocked out if price rises above barrier
+};
 
 class BarrierPricer : public Pricer
 {
 private:
-	double price;
-	double sum, sum2;
-	double barrier = 170.0; // barrier that knocks the price in or out
-	int NSim;
+    double price;
+    double sum;
+    int NSim;
+    double barrier;
+    double rebate;
+    BarrierType barrierType;
 
 public:
-	BarrierPricer(const Payoff& payoff, const Discount& discounter); // Argument Constructor
-	virtual ~BarrierPricer(); // Destructor
-
-	void ProcessPath(const std::vector<double>& t); // A path for each simulation draw.
-	double DiscountFactor(); // Discounting
-	void PostProcess(); // Notify end of simulation
-	double Price(); // Option Price
+    // Default constructor (uses default barrier)
+    BarrierPricer(const Payoff& payoff, const Discount& discounter);
+    
+    // Parameterized constructor (specify barrier)
+    BarrierPricer(const Payoff& payoff, const Discount& discounter,
+                  double barrierLevel, BarrierType type = BarrierType::DownAndOut,
+                  double rebateAmount = 0.0);
+    
+    virtual ~BarrierPricer();
+    
+    void ProcessPath(const std::vector<double>& t) override;
+    double DiscountFactor() override;
+    void PostProcess() override;
+    double Price() override;
+    
+    // Setters for dynamic configuration
+    void setBarrier(double level) { barrier = level; }
+    void setBarrierType(BarrierType type) { barrierType = type; }
+    void setRebate(double amount) { rebate = amount; }
 };
 
-#endif // !BarrierPricer_HPP
+#endif

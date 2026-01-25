@@ -1,16 +1,15 @@
 {
-  "Mediators": [ "MonteCarlo" ],
-  "simulation": {
-    "nsim": 1000000,
-    "timesteps": 360,
-    "builder_choice": 1,
-    "execution_mode": "openmp"
+  "mediator": {
+    "type": "MonteCarlo",
+    "executionMode": "single-threaded",
+    "numSimulations": 10000,
+    "timesteps": 500,
+    "builderChoice": 1
   },
   "pricers": [
     "EuropeanPricer",
     "AsianPricer",
-    "BarrierPricer",
-    "BrownianBridgePricer"
+    "BarrierPricer"
   ],
   "fdms": [
     "DerivativeFree",
@@ -32,7 +31,10 @@
       "optionType": 1,
       "interestRate": 0.08,
       "beta": 1.0,
-      "initialPrice": 60.0
+      "initialPrice": 60.0,
+      "barrier": 50.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch1_Put",
@@ -43,7 +45,10 @@
       "optionType": -1,
       "interestRate": 0.08,
       "beta": 1.0,
-      "initialPrice": 60.0
+      "initialPrice": 60.0,
+      "barrier": 50.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch2_Call",
@@ -54,7 +59,10 @@
       "optionType": 1,
       "interestRate": 0.0,
       "beta": 1.0,
-      "initialPrice": 100.0
+      "initialPrice": 100.0,
+      "barrier": 85.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch2_Put",
@@ -65,7 +73,10 @@
       "optionType": -1,
       "interestRate": 0.0,
       "beta": 1.0,
-      "initialPrice": 100.0
+      "initialPrice": 100.0,
+      "barrier": 85.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch3_Call",
@@ -76,7 +87,10 @@
       "optionType": 1,
       "interestRate": 0.12,
       "beta": 1.0,
-      "initialPrice": 5.0
+      "initialPrice": 5.0,
+      "barrier": 3.5,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch3_Put",
@@ -87,7 +101,10 @@
       "optionType": -1,
       "interestRate": 0.12,
       "beta": 1.0,
-      "initialPrice": 5.0
+      "initialPrice": 5.0,
+      "barrier": 3.5,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch4_Call",
@@ -98,7 +115,10 @@
       "optionType": 1,
       "interestRate": 0.08,
       "beta": 1.0,
-      "initialPrice": 100.0
+      "initialPrice": 100.0,
+      "barrier": 80.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     },
     {
       "name": "Batch4_Put",
@@ -109,7 +129,10 @@
       "optionType": -1,
       "interestRate": 0.08,
       "beta": 1.0,
-      "initialPrice": 100.0
+      "initialPrice": 100.0,
+      "barrier": 80.0,
+      "barrierType": "DownAndOut",
+      "rebate": 0.0
     }
   ]
 }
