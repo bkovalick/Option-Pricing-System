@@ -5,13 +5,12 @@
 #include <BusinessLogic/Factory/SdeFactory.hpp>
 #include <BusinessLogic/Factory/FdmFactory.hpp>
 #include <BusinessLogic/Factory/RngFactory.hpp>
-#include <iomanip>
-#include <fstream>
 
 SimulationOrchestrator::SimulationOrchestrator(const SimulationConfig& config)
     : config_(config)
 {
     initializeOptions();
+    createComponentConfigs();
     buildMediators();
 }
 
@@ -31,64 +30,86 @@ void SimulationOrchestrator::initializeOptions()
     }
 }
 
-void SimulationOrchestrator::buildMediators()
+void SimulationOrchestrator::createComponentConfigs()
 {
-    std::cout << "\n=== Building Simulation Instances ===" << std::endl;
-    
-    int nSim = config_.numSimulations;
-    int nTimesteps = config_.numTimesteps;
-    int instanceId = 0;
-    
-    auto numSimulationInst = options_.size() *
+    std::cout << "\n=== Creating all possible Monte Carlo Component Configurations ===" << std::endl;
+	componentConfigs_.clear();
+    componentConfigs_.reserve(
         config_.sdeTypes.size() *
         config_.fdmTypes.size() *
-        config_.rngTypes.size();
+        config_.rngTypes.size());
 
-    simulationInstances_.clear();
-    simulationInstances_.reserve(numSimulationInst);
-    
-    if (config_.mediatorType == MediatorType::MonteCarlo)
-    {
-        for (const auto& option : options_) {
-            for (const auto& sdeType : config_.sdeTypes) {
-                for (const auto& fdmType : config_.fdmTypes) {
-                    for (const auto& rngType : config_.rngTypes) {
-                        
-                        SimulationInstance simulationInstance(
-                            instanceId, sdeType, fdmType, rngType, option.OptionName
-                        );
-                        
-                        auto sde = SdeFactory::createSde(sdeType, option);
-                        auto fdm = FdmFactory::createFdm(fdmType, option, sde, nTimesteps);
-                        auto rng = RngFactory::createRng(rngType);
-
-                        if (!sde || !fdm || !rng) {
-                            std::cerr << "  Error: Failed to create components!" << std::endl;
-                            continue;
-                        }
-
-                        auto parts = std::make_tuple(sde, fdm, rng);
-                        simulationInstance.mediator_ = std::make_unique<MonteCarloMediator>(parts, nSim);
-
-                        int slot = 0;
-                        for (const auto& pricerType : config_.pricerTypes) {
-                            auto pricer = PricerFactory::createPricer(pricerType, option);
-                            if (pricer) {
-                                simulationInstance.pricers_.push_back(pricer);
-                                simulationInstance.mediator_->connectPricers(pricer, slot);
-                                slot++;
-                            }
-                        }
-
-                        simulationInstances_.push_back(std::move(simulationInstance));
-                        instanceId++;
-                    }
-                }
+    for (const auto& sdeType : config_.sdeTypes) {
+        for (const auto& fdmType : config_.fdmTypes) {
+            for (const auto& rngType : config_.rngTypes) {
+                ComponentConfig compConfig{ sdeType, fdmType, rngType };
+				componentConfigs_.push_back(compConfig);
             }
         }
     }
-    
-    std::cout << "Created " << simulationInstances_.size() << " instances" << std::endl;
+}
+SimulationInstance SimulationOrchestrator::createSimulationInstance(
+    int instanceId,
+    const OptionData& option,
+    const ComponentConfig& components) const
+{
+    std::cout << "\n=== Building singular simulation instance ===" << std::endl;
+    SimulationInstance simulationInstance(
+        instanceId, components.sdeType, components.fdmType, components.rngType, option.OptionName
+    );
+
+    auto sde = SdeFactory::createSde(components.sdeType, option);
+    auto fdm = FdmFactory::createFdm(components.fdmType, option, sde, config_.numTimesteps);
+    auto rng = RngFactory::createRng(components.rngType);
+
+    if (!sde || !fdm || !rng) {
+        throw std::runtime_error("Failed to create components for instance " +
+            std::to_string(instanceId));
+    }
+
+    auto parts = std::make_tuple(sde, fdm, rng);
+    simulationInstance.mediator_ = std::make_unique<MonteCarloMediator>(parts, config_.numSimulations);
+
+    return simulationInstance;
+}
+
+void SimulationOrchestrator::attachPricers(SimulationInstance& simulationInstance, 
+    const OptionData& option)
+{
+    std::cout << "\n=== Attaching Pricers to Options ===" << std::endl;
+    int slot = 0;
+    for (const auto& pricerType : config_.pricerTypes) {
+        auto pricer = PricerFactory::createPricer(pricerType, option);
+        if (pricer) {
+            simulationInstance.pricers_[pricerType] = pricer;
+            simulationInstance.mediator_->connectPricers(pricer, slot);
+            slot++;
+        }
+    }
+}
+
+void SimulationOrchestrator::buildMediators()
+{
+    std::cout << "\n=== Building Simulation Instances ===" << std::endl;
+
+    int instanceId = 0;
+    for (const auto& option : options_) {
+        for (const auto& componentConfig : componentConfigs_) {
+            try
+            {
+                auto simulationInstance = createSimulationInstance(instanceId, option, componentConfig);
+
+                attachPricers(simulationInstance, option);
+
+                simulationInstances_.push_back(std::move(simulationInstance));
+                instanceId++;
+            }
+            catch (const std::exception& e) {
+                std::cerr << "  Error creating instance " << instanceId
+                    << ": " << e.what() << std::endl;
+            }
+        }
+    }
 }
 
 void SimulationOrchestrator::run()
@@ -121,11 +142,11 @@ void SimulationOrchestrator::run()
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
 
-        // Capture results ✅
+        // Capture results
         SimulationResult result;
         result.instanceId = simulation.instanceId_;
         result.optionName = simulation.optionName_;
-        result.mediatorType = "MonteCarlo";  // TODO: Get from config
+        result.mediatorType = toString(config_.mediatorType);
         result.sdeType = simulation.sde_;
         result.fdmType = simulation.fdm_;
         result.rngType = simulation.rng_;
@@ -135,8 +156,9 @@ void SimulationOrchestrator::run()
         
         // Extract pricer results
         for (const auto& pricer : simulation.pricers_) {
-            double price = pricer->Price();
-            result.addPricerResult("Pricer", price);  // TODO: Get actual pricer type
+			const std::string& pricerType = pricer.first;
+            double price = pricer.second->Price();
+            result.addPricerResult(pricerType, price);
         }
         
         results_.addResult(result);
@@ -172,48 +194,6 @@ void SimulationOrchestrator::printResults() const
                       << ": " << std::setw(12) << std::right << std::fixed << std::setprecision(6) 
                       << pricerResult.price << std::endl;
         }
-    }
-}
-
-void SimulationOrchestrator::printComparisonTable() const
-{
-    std::cout << "\n╔════════════════════════════════════════════════════════════════╗" << std::endl;
-    std::cout << "║                     METHOD COMPARISON                          ║" << std::endl;
-    std::cout << "╚════════════════════════════════════════════════════════════════╝" << std::endl;
-
-    const auto& allResults = results_.getResults();
-    const auto* baseline = results_.getBaseline();
-    
-    if (!baseline || baseline->pricerResults.empty()) {
-        std::cout << "No baseline results available" << std::endl;
-        return;
-    }
-    
-    double baselinePrice = baseline->pricerResults[0].price;
-
-    std::cout << std::fixed << std::setprecision(6);
-    std::cout << std::setw(5) << "ID"
-              << std::setw(15) << "SDE"
-              << std::setw(15) << "FDM"
-              << std::setw(15) << "RNG"
-              << std::setw(15) << "Price"
-              << std::setw(20) << "Diff from Baseline" << std::endl;
-    std::cout << std::string(85, '-') << std::endl;
-
-    for (const auto& result : allResults) {
-        if (result.pricerResults.empty()) continue;
-
-        double price = result.pricerResults[0].price;
-        double diff = price - baselinePrice;
-        double percentDiff = (baselinePrice != 0.0) ? (diff / baselinePrice * 100.0) : 0.0;
-
-        std::cout << std::setw(5) << result.instanceId
-                  << std::setw(15) << result.sdeType
-                  << std::setw(15) << result.fdmType
-                  << std::setw(15) << result.rngType
-                  << std::setw(15) << price
-                  << std::setw(12) << diff 
-                  << " (" << std::setprecision(2) << percentDiff << "%)" << std::endl;
     }
 }
 

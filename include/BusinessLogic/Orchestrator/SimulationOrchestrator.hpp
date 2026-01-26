@@ -11,16 +11,25 @@
 #include <memory>
 #include <chrono>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 
 class Sde;
 class FdmBase;
 class Rng;
 
+struct ComponentConfig
+{
+    std::string sdeType;
+    std::string fdmType;
+	std::string rngType;
+};
+
 struct SimulationInstance
 {
     int instanceId_;
     std::unique_ptr<Mediator> mediator_;
-    std::vector<std::shared_ptr<Pricer>> pricers_;
+    std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
     std::string sde_;
     std::string fdm_;
     std::string rng_;
@@ -41,12 +50,17 @@ class SimulationOrchestrator
 {
 private:
     SimulationConfig config_;
+    std::vector<ComponentConfig> componentConfigs_;
     std::vector<SimulationInstance> simulationInstances_;
     std::vector<OptionData> options_;
     SimulationResultsContainer results_;
 
     void initializeOptions();
+	void createComponentConfigs();
     void buildMediators();
+    SimulationInstance createSimulationInstance(int instanceId, const OptionData& option,
+        const ComponentConfig& components) const;
+    void attachPricers(SimulationInstance& simulationInstance, const OptionData& option);
 
 public:
     explicit SimulationOrchestrator(const SimulationConfig& config);
@@ -62,7 +76,6 @@ public:
     
     void printConfiguration() const;
     void printResults() const;
-    void printComparisonTable() const;
     
     // Export results
     void exportToCSV(const std::string& filename) const;

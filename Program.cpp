@@ -57,7 +57,6 @@ int main()
 		
 		// Print results
 		orchestrator.printResults();
-		orchestrator.printComparisonTable();
 		
 		// Export to CSV
 		orchestrator.exportToCSV("results.csv");

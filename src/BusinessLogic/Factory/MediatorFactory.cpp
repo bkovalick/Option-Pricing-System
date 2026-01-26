@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <string>
 
-// Implement the toString function for MediatorType
 std::string toString(const MediatorType& mediatorType) {
 	switch (mediatorType) {
 	case MediatorType::MonteCarlo:
