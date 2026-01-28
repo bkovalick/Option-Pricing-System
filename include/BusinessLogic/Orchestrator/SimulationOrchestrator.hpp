@@ -1,10 +1,6 @@
 ﻿#ifndef SimulationOrchestrator_HPP
 #define SimulationOrchestrator_HPP
 
-#include <Core/Configuration/SimulationConfig.hpp>
-#include <Core/Results/SimulationResults.hpp>
-#include <BusinessLogic/Mediators/Mediator.hpp>
-#include <BusinessLogic/Pricers/Pricer.hpp>
 #include <map>
 #include <string>
 #include <vector>
@@ -13,6 +9,12 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+
+#include <Core/Configuration/SimulationConfig.hpp>
+#include <Core/Results/SimulationResults.hpp>
+#include <Core/Domain/SimulationInstance.hpp>
+#include <BusinessLogic/Mediators/Mediator.hpp>
+#include <BusinessLogic/Pricers/Pricer.hpp>
 
 class Sde;
 class FdmBase;
@@ -23,27 +25,6 @@ struct ComponentConfig
     std::string sdeType;
     std::string fdmType;
 	std::string rngType;
-};
-
-struct SimulationInstance
-{
-    int instanceId_;
-    std::unique_ptr<Mediator> mediator_;
-    std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
-    std::string sde_;
-    std::string fdm_;
-    std::string rng_;
-    std::string optionName_;
-
-    SimulationInstance(int instanceId, const std::string& sde,
-        const std::string& fdm, const std::string& rng, const std::string& optionName)
-        : instanceId_(instanceId), sde_(sde), fdm_(fdm), rng_(rng), optionName_(optionName) {}
-    
-    SimulationInstance(SimulationInstance&&) = default;
-    SimulationInstance& operator=(SimulationInstance&&) = default;
-    
-    SimulationInstance(const SimulationInstance&) = delete;
-    SimulationInstance& operator=(const SimulationInstance&) = delete;
 };
 
 class SimulationOrchestrator

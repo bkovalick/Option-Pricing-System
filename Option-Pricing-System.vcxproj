@@ -193,6 +193,7 @@
     <ClInclude Include="include\businesslogic\pricers\Pricer.hpp" />
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp" />
     <ClInclude Include="include\core\domain\OptionData.hpp" />
+    <ClInclude Include="include\Core\Domain\SimulationInstance.hpp" />
     <ClInclude Include="include\Core\Results\SimulationResults.hpp" />
   </ItemGroup>
   <ItemGroup>
