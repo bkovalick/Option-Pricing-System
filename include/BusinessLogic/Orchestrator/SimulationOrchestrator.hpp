@@ -13,6 +13,7 @@
 #include <Core/Configuration/SimulationConfig.hpp>
 #include <Core/Results/SimulationResults.hpp>
 #include <Core/Domain/SimulationInstance.hpp>
+#include <Core/Domain/ComponentConfig.hpp>
 #include <BusinessLogic/Mediators/Mediator.hpp>
 #include <BusinessLogic/Pricers/Pricer.hpp>
 
@@ -20,12 +21,7 @@ class Sde;
 class FdmBase;
 class Rng;
 
-struct ComponentConfig
-{
-    std::string sdeType;
-    std::string fdmType;
-	std::string rngType;
-};
+
 
 class SimulationOrchestrator
 {
