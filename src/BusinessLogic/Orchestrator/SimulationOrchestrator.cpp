@@ -176,10 +176,8 @@ void SimulationOrchestrator::run()
 
 void SimulationOrchestrator::printResults() const
 {
-    std::cout << "\n╔════════════════════════════════════════════════════════════════╗" << std::endl;
-    std::cout << "║              SIMULATION RESULTS SUMMARY                        ║" << std::endl;
-    std::cout << "╚════════════════════════════════════════════════════════════════╝" << std::endl;
-    
+    std::cout << "\n" << std::endl;
+    std::cout << "SIMULATION RESULTS SUMMARY" << std::endl;
     const auto& allResults = results_.getResults();
     
     for (const auto& result : allResults) {

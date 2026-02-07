@@ -1,6 +1,3 @@
-// Author: Ben Kovalick
-// Purpose: Implementation of the mediator pattern.
-
 #include "BusinessLogic/Mediators/MonteCarloMediator.hpp"
 #include <BusinessLogic/Models/StochasticDifferentialEquations/GBM.hpp>
 #include <Core/Configuration/SimulationConfig.hpp>
@@ -33,8 +30,6 @@ void MonteCarloMediator::connectPricers(const std::shared_ptr<Pricer>& pricer, i
 void MonteCarloMediator::start()
 {
 	double VOld, VNew;
-	std::shared_future<double> VNew2;
-
 	for (long i = 1; i <= NSim; ++i)
 	{
 
@@ -57,7 +52,6 @@ void MonteCarloMediator::start()
 	disconnect();
 }
 
-// MC simulation using OpenMP for parallelization 
 void MonteCarloMediator::startOpenMP()
 {
 	double VOld, VNew;
@@ -65,33 +59,28 @@ void MonteCarloMediator::startOpenMP()
 
 	#pragma omp parallel for
 	for (long i = 1; i <= NSim; ++i)
-	{	// Calc a path at each iteration
-
+	{
 		tid = omp_get_thread_num();
 
 		if ((i / 5000) * 5000 == i)
-		{ // Give status after a given numbers of iterations
+		{
 			std::cout << i << std::endl;
 		}
 
 		VOld = sde_->InitialCondition(); res[0] = VOld;
 		for (unsigned int n = 1; n < res.size(); n++)
-		{ // Compute the solution at level n+l
+		{
 			VNew = fdm_->advance(VOld, fdm_->meshArray[n - 1], fdm_->k, rng_->gen(), rng_->gen());
 			res[n] = VNew; VOld = VNew;
 		}
-		// Send path data to the pricers
 		path(res);
 	}
-
-	// In case you want to see the number of threads used.
 	std::cout << "NumThreads: " << tid << std::endl;
 
-	finish(); // Signal to pricers to finish up.
-	disconnect(); // Disconnect signals from their slots.
+	finish();
+	disconnect();
 }
 
-// MC simulation using the PPL library for parallelization
 void MonteCarloMediator::startPPL()
 {
 	double VOld, VNew;
@@ -99,7 +88,7 @@ void MonteCarloMediator::startPPL()
 	concurrency::parallel_for(0, NSim, [&](int i)
 	{
 		if ((i / 5000) * 5000 == i)
-		{ // Give status after a given numbers of iterations
+		{
 			std::cout << i << std::endl;
 		}
 
@@ -117,7 +106,6 @@ void MonteCarloMediator::startPPL()
 	disconnect();
 }
 
-// Disconnect from all slots.
 void MonteCarloMediator::disconnect()
 {
 	path.disconnect_all_slots();

@@ -9,7 +9,7 @@
 
 struct SimulationInstance
 {
-private:
+public:
 	int instanceId_;
 	std::unique_ptr<Mediator> mediator_;
 	std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
@@ -18,7 +18,6 @@ private:
 	std::string rng_;
 	std::string optionName_;
 
-public:
 	SimulationInstance(int instanceId, const std::string& sde, 
 		const std::string& fdm, const std::string& rng, const std::string& optionName) 
 		: instanceId_(instanceId), sde_(sde), fdm_(fdm), rng_(rng), optionName_(optionName)
@@ -31,5 +30,5 @@ public:
 	SimulationInstance& operator=(SimulationInstance&) = delete;
 
 };
-#endif
 
+#endif

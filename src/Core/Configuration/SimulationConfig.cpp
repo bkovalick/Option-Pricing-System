@@ -25,8 +25,8 @@ SimulationConfig SimulationConfig::fromJson(const json& j)
         std::string mediatorStr = mediator["type"].get<std::string>();
         if (mediatorStr == "MonteCarlo") {
             config.mediatorType = MediatorType::MonteCarlo;
-        } else if (mediatorStr == "PDE") {
-            config.mediatorType = MediatorType::PDE;
+        } else if (mediatorStr == "BlackScholes") {
+            config.mediatorType = MediatorType::BlackScholes;
         } else {
             throw std::runtime_error("Unknown mediator type: " + mediatorStr);
         }

@@ -10,7 +10,7 @@
 enum class MediatorType
 {
     MonteCarlo,
-    PDE,
+    BlackScholes,
     BinomialTree
 };
 

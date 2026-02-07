@@ -8,7 +8,10 @@ std::string toString(const MediatorType& mediatorType) {
 	switch (mediatorType) {
 	case MediatorType::MonteCarlo:
 		return "MonteCarlo";
-		// Add other cases as needed
+	case MediatorType::BlackScholes:
+		return "BlackScholes";
+	case MediatorType::BinomialTree:
+		return "BinomialTree";
 	default:
 		return "Unknown";
 	}

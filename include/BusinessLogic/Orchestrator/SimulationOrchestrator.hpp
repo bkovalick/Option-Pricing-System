@@ -21,8 +21,6 @@ class Sde;
 class FdmBase;
 class Rng;
 
-
-
 class SimulationOrchestrator
 {
 private:
@@ -50,14 +48,9 @@ public:
     SimulationOrchestrator& operator=(SimulationOrchestrator&&) = default;
 
     void run();
-    
     void printConfiguration() const;
     void printResults() const;
-    
-    // Export results
     void exportToCSV(const std::string& filename) const;
-    
-    // Access results
     const SimulationResultsContainer& getResults() const { return results_; }
 };
 

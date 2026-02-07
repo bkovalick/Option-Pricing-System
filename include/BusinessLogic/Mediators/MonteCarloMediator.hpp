@@ -22,6 +22,7 @@
 #include "BusinessLogic/Models/RandomNumberGenerators/Rng.hpp" 
 #include "BusinessLogic/Mediators/Mediator.hpp"
 #include <BusinessLogic/Pricers/Pricer.hpp>
+#include <BusinessLogic/Models/BlackScholes/BlackScholes.hpp>
 
 template <typename T>
 using PathEvent = boost::signals2::signal<void(const T& t)>;

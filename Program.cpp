@@ -8,19 +8,16 @@
 #include <chrono>
 #include <fstream>
 
-// Pricer classes
 #include "include/BusinessLogic/Pricers/Pricer.hpp"
 #include "include/BusinessLogic/Pricers/EuropeanPricer.hpp"
 #include "include/BusinessLogic/Pricers/AsianPricer.hpp"
 #include "include/BusinessLogic/Pricers/BarrierPricer.hpp"
 #include "include/BusinessLogic/Pricers/BrownianBridgePricer.hpp"
 
-// Builder/Mediator Classes
 #include "include/BusinessLogic/Builders/MonteCarloBuilder.hpp"
 #include "include/BusinessLogic/Mediators/MonteCarloMediator.hpp"
 #include "include/BusinessLogic/Factory/MediatorFactory.hpp"
 
-// Option Data Struct
 #include "include/Core/Domain/OptionData.hpp"
 #include "Core/Configuration/SimulationConfig.hpp"
 #include "BusinessLogic/Orchestrator/SimulationOrchestrator.hpp"
