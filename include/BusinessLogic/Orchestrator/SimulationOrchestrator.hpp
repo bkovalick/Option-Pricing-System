@@ -14,12 +14,23 @@
 #include <Core/Results/SimulationResults.hpp>
 #include <Core/Domain/SimulationInstance.hpp>
 #include <Core/Domain/ComponentConfig.hpp>
-#include <BusinessLogic/Mediators/Mediator.hpp>
 #include <BusinessLogic/Pricers/Pricer.hpp>
+
+#include <BusinessLogic/Factory/PricerFactory.hpp>
+#include <BusinessLogic/Factory/SdeFactory.hpp>
+#include <BusinessLogic/Factory/FdmFactory.hpp>
+#include <BusinessLogic/Factory/RngFactory.hpp>
+
+#include <BusinessLogic/Mediators/Mediator.hpp>
+#include <BusinessLogic/Mediators/MonteCarloMediator.hpp>
+#include <BusinessLogic/Mediators/BlackScholesMediator.hpp>
+#include "BusinessLogic/Models/BlackScholes/BlackScholes.hpp"
 
 class Sde;
 class FdmBase;
 class Rng;
+
+std::string toString(const MediatorType& type);
 
 class SimulationOrchestrator
 {
@@ -31,10 +42,14 @@ private:
     SimulationResultsContainer results_;
 
     void initializeOptions();
-	void createComponentConfigs();
-    void buildMediators();
+	void createComponentsConfig();
+    void initializeSimulations();
+
     SimulationInstance createSimulationInstance(int instanceId, const OptionData& option,
         const ComponentConfig& components) const;
+    SimulationInstance createSimulationInstanceMonteCarlo(int instanceId, const OptionData& option,
+        const ComponentConfig& components) const;
+    SimulationInstance createSimulationInstanceBlackScholes(int instanceId, const OptionData& option) const;
     void attachPricers(SimulationInstance& simulationInstance, const OptionData& option);
 
 public:
@@ -48,8 +63,6 @@ public:
     SimulationOrchestrator& operator=(SimulationOrchestrator&&) = default;
 
     void run();
-    void printConfiguration() const;
-    void printResults() const;
     void exportToCSV(const std::string& filename) const;
     const SimulationResultsContainer& getResults() const { return results_; }
 };

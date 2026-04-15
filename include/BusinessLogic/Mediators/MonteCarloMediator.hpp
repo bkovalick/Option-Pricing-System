@@ -1,7 +1,3 @@
-// Author: Ben Kovalick
-// Purpose: Mediator header file, the main responsibility of this class is to coordinate 
-// the other components in the system.
-
 #ifndef MonteCarloMediator_HPP
 #define MonteCarloMediator_HPP
 

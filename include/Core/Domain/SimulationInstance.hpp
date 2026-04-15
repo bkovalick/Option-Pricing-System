@@ -1,4 +1,4 @@
-#ifndef SimulationInstance_HPP
+﻿#ifndef SimulationInstance_HPP
 #define SimulationInstance_HPP
 
 #include <string>
@@ -13,22 +13,28 @@ public:
 	int instanceId_;
 	std::unique_ptr<Mediator> mediator_;
 	std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
-	std::string sde_;
-	std::string fdm_;
-	std::string rng_;
+	
+	std::string methodType_;       // "MonteCarlo", "BlackScholes", "BinomialTree"
+	std::string algorithmDetail_;  // "GBM+Euler", "Analytical", "CRR"
+	std::string executionMode_;    // "Stochastic", "Deterministic", "Lattice"
 	std::string optionName_;
 
-	SimulationInstance(int instanceId, const std::string& sde, 
-		const std::string& fdm, const std::string& rng, const std::string& optionName) 
-		: instanceId_(instanceId), sde_(sde), fdm_(fdm), rng_(rng), optionName_(optionName)
-	{}
-
+	SimulationInstance(int instanceId, 
+					  const std::string& methodType,
+					  const std::string& algorithmDetail, 
+					  const std::string& executionMode,
+					  const std::string& optionName) 
+		: instanceId_(instanceId), 
+		  methodType_(methodType),
+		  algorithmDetail_(algorithmDetail),
+		  executionMode_(executionMode),
+		  optionName_(optionName) {}
+	
 	SimulationInstance(SimulationInstance&&) = default;
 	SimulationInstance& operator=(SimulationInstance&&) = default;
 
-	SimulationInstance(SimulationInstance&) = delete;
-	SimulationInstance& operator=(SimulationInstance&) = delete;
-
+	SimulationInstance(const SimulationInstance&) = delete;
+	SimulationInstance& operator=(const SimulationInstance&) = delete;
 };
 
 #endif

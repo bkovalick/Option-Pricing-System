@@ -14,7 +14,7 @@ private:
 
 public:
 	BlackScholesMediator(const std::shared_ptr<BlackScholes>& blackScholesModel);
-	virtual ~BlackScholesMediator();
+	virtual ~BlackScholesMediator() = default;
 
 	void connectPricers(const std::shared_ptr<Pricer>& pricer, int slot) override;
 	void start() override;

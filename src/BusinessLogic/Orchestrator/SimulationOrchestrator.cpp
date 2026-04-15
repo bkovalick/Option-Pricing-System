@@ -1,17 +1,24 @@
 ﻿#include "BusinessLogic/Orchestrator/SimulationOrchestrator.hpp"
-#include <BusinessLogic/Factory/MediatorFactory.hpp>
-#include <BusinessLogic/Factory/PricerFactory.hpp>
-#include <BusinessLogic/Mediators/MonteCarloMediator.hpp>
-#include <BusinessLogic/Factory/SdeFactory.hpp>
-#include <BusinessLogic/Factory/FdmFactory.hpp>
-#include <BusinessLogic/Factory/RngFactory.hpp>
+
+std::string toString(const MediatorType& mediatorType) {
+    switch (mediatorType) {
+    case MediatorType::MonteCarlo:
+        return "MonteCarlo";
+    case MediatorType::BlackScholes:
+        return "BlackScholes";
+    case MediatorType::BinomialTree:
+        return "BinomialTree";
+    default:
+        return "Unknown";
+    }
+}
 
 SimulationOrchestrator::SimulationOrchestrator(const SimulationConfig& config)
     : config_(config)
 {
     initializeOptions();
-    createComponentConfigs();
-    buildMediators();
+    createComponentsConfig();
+    initializeSimulations();
 }
 
 void SimulationOrchestrator::initializeOptions()
@@ -30,10 +37,21 @@ void SimulationOrchestrator::initializeOptions()
     }
 }
 
-void SimulationOrchestrator::createComponentConfigs()
+void SimulationOrchestrator::createComponentsConfig()
 {
-    std::cout << "\n=== Creating all possible Monte Carlo Component Configurations ===" << std::endl;
-	componentConfigs_.clear();
+    std::cout << "\n=== Creating Component Configurations ===" << std::endl;
+    componentConfigs_.clear();
+
+    // For analytical mediators, create single placeholder config
+    if (config_.mediatorType == MediatorType::BlackScholes ||
+        config_.mediatorType == MediatorType::BinomialTree) {
+
+        componentConfigs_.emplace_back("Analytical", "Analytical", "Analytical");
+        std::cout << "Analytical mediator - using placeholder configuration" << std::endl;
+        return;
+    }
+
+    // For Monte Carlo, create all combinations
     componentConfigs_.reserve(
         config_.sdeTypes.size() *
         config_.fdmTypes.size() *
@@ -42,25 +60,65 @@ void SimulationOrchestrator::createComponentConfigs()
     for (const auto& sdeType : config_.sdeTypes) {
         for (const auto& fdmType : config_.fdmTypes) {
             for (const auto& rngType : config_.rngTypes) {
-                ComponentConfig compConfig{ sdeType, fdmType, rngType };
-				componentConfigs_.push_back(compConfig);
+                componentConfigs_.emplace_back(sdeType, fdmType, rngType);
+            }
+        }
+    }
+    std::cout << "Created " << componentConfigs_.size() << " component combinations" << std::endl;
+}
+
+void SimulationOrchestrator::initializeSimulations()
+{
+    std::cout << "\n=== Building Simulation Instances ===" << std::endl;
+    int instanceId = 0;
+    for (const auto& option : options_) {
+        for (const auto& componentConfig : componentConfigs_) {
+            try
+            {
+                auto simulationInstance = createSimulationInstance(instanceId, option, componentConfig);
+
+                attachPricers(simulationInstance, option);
+
+                simulationInstances_.push_back(std::move(simulationInstance));
+                instanceId++;
+            }
+            catch (const std::exception& e) {
+                std::cerr << "  Error creating instance " << instanceId << ": " << e.what() << std::endl;
             }
         }
     }
 }
+
 SimulationInstance SimulationOrchestrator::createSimulationInstance(
     int instanceId,
     const OptionData& option,
-    const ComponentConfig& components) const
+    const ComponentConfig& component) const
 {
-    std::cout << "\n=== Building singular simulation instance ===" << std::endl;
+    switch (config_.mediatorType) {
+    case MediatorType::MonteCarlo:
+        return createSimulationInstanceMonteCarlo(instanceId, option, component);
+
+    case MediatorType::BlackScholes:
+        return createSimulationInstanceBlackScholes(instanceId, option);
+
+    default:
+        throw std::runtime_error("Unknown mediator type");
+    }
+}
+
+SimulationInstance SimulationOrchestrator::createSimulationInstanceMonteCarlo(
+    int instanceId,
+    const OptionData& option,
+    const ComponentConfig& component) const
+{
+    std::cout << "\n=== Building singular monte carlo simulation instance ===" << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, components.sdeType, components.fdmType, components.rngType, option.OptionName
+        instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName
     );
 
-    auto sde = SdeFactory::createSde(components.sdeType, option);
-    auto fdm = FdmFactory::createFdm(components.fdmType, option, sde, config_.numTimesteps);
-    auto rng = RngFactory::createRng(components.rngType);
+    auto sde = SdeFactory::createSde(component.sdeType, option);
+    auto fdm = FdmFactory::createFdm(component.fdmType, option, sde, config_.numTimesteps);
+    auto rng = RngFactory::createRng(component.rngType);
 
     if (!sde || !fdm || !rng) {
         throw std::runtime_error("Failed to create components for instance " +
@@ -69,7 +127,20 @@ SimulationInstance SimulationOrchestrator::createSimulationInstance(
 
     auto parts = std::make_tuple(sde, fdm, rng);
     simulationInstance.mediator_ = std::make_unique<MonteCarloMediator>(parts, config_.numSimulations);
+    return simulationInstance;
+}
 
+SimulationInstance SimulationOrchestrator::createSimulationInstanceBlackScholes(
+    int instanceId,
+    const OptionData& option) const
+{
+    std::cout << "\n=== Building singular black scholes simulation instance ===" << std::endl;
+    SimulationInstance simulationInstance(
+        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName
+    );
+
+	auto blackScholesModel = std::make_shared<BlackScholes>(option);
+    simulationInstance.mediator_ = std::make_unique<BlackScholesMediator>(blackScholesModel);
     return simulationInstance;
 }
 
@@ -88,30 +159,6 @@ void SimulationOrchestrator::attachPricers(SimulationInstance& simulationInstanc
     }
 }
 
-void SimulationOrchestrator::buildMediators()
-{
-    std::cout << "\n=== Building Simulation Instances ===" << std::endl;
-
-    int instanceId = 0;
-    for (const auto& option : options_) {
-        for (const auto& componentConfig : componentConfigs_) {
-            try
-            {
-                auto simulationInstance = createSimulationInstance(instanceId, option, componentConfig);
-
-                attachPricers(simulationInstance, option);
-
-                simulationInstances_.push_back(std::move(simulationInstance));
-                instanceId++;
-            }
-            catch (const std::exception& e) {
-                std::cerr << "  Error creating instance " << instanceId
-                    << ": " << e.what() << std::endl;
-            }
-        }
-    }
-}
-
 void SimulationOrchestrator::run()
 {
     std::cout << "\n=== Running All Simulations ===" << std::endl;
@@ -121,8 +168,8 @@ void SimulationOrchestrator::run()
     
     for (const auto& simulation : simulationInstances_) {
         std::cout << "\n--- Instance " << simulation.instanceId_ << " ---" << std::endl;
-        std::cout << "Config: " << simulation.sde_ << " × " 
-                  << simulation.fdm_ << " × " << simulation.rng_ << std::endl;
+        std::cout << "Config: " << simulation.methodType_ << " × "
+                  << simulation.algorithmDetail_ << " × " << simulation.executionMode_ << std::endl;
 
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -147,9 +194,9 @@ void SimulationOrchestrator::run()
         result.instanceId = simulation.instanceId_;
         result.optionName = simulation.optionName_;
         result.mediatorType = toString(config_.mediatorType);
-        result.sdeType = simulation.sde_;
-        result.fdmType = simulation.fdm_;
-        result.rngType = simulation.rng_;
+        result.methodType = simulation.methodType_;
+        result.algorithmDetail = simulation.algorithmDetail_;
+        result.executionMode = simulation.executionMode_;
         result.numSimulations = config_.numSimulations;
         result.numTimesteps = config_.numTimesteps;
         result.computationTime = elapsed.count();
@@ -172,27 +219,6 @@ void SimulationOrchestrator::run()
     std::cout << "\n=== All Simulations Complete ===" << std::endl;
     std::cout << "Total time: " << totalElapsed.count() << " seconds" << std::endl;
     std::cout << "Average per instance: " << results_.getAverageTime() << " seconds" << std::endl;
-}
-
-void SimulationOrchestrator::printResults() const
-{
-    std::cout << "\n" << std::endl;
-    std::cout << "SIMULATION RESULTS SUMMARY" << std::endl;
-    const auto& allResults = results_.getResults();
-    
-    for (const auto& result : allResults) {
-        std::cout << "\n━━━ Instance " << result.instanceId << " ━━━" << std::endl;
-        std::cout << "Option: " << result.optionName << std::endl;
-        std::cout << "Config: " << result.sdeType << " × " << result.fdmType << " × " << result.rngType << std::endl;
-        std::cout << "Time: " << std::fixed << std::setprecision(4) << result.computationTime << "s" << std::endl;
-        std::cout << "\nPrices:" << std::endl;
-        
-        for (const auto& pricerResult : result.pricerResults) {
-            std::cout << "  " << std::setw(20) << std::left << pricerResult.pricerType 
-                      << ": " << std::setw(12) << std::right << std::fixed << std::setprecision(6) 
-                      << pricerResult.price << std::endl;
-        }
-    }
 }
 
 void SimulationOrchestrator::exportToCSV(const std::string& filename) const
@@ -224,13 +250,4 @@ void SimulationOrchestrator::exportToCSV(const std::string& filename) const
     
     file.close();
     std::cout << "Results exported to " << filename << std::endl;
-}
-
-void SimulationOrchestrator::printConfiguration() const
-{
-    std::cout << "\n=== Orchestrator Configuration ===" << std::endl;
-    std::cout << "Simulation Instances: " << simulationInstances_.size() << std::endl;
-    std::cout << "Options: " << options_.size() << std::endl;
-    std::cout << "Simulations per Instance: " << config_.numSimulations << std::endl;
-    std::cout << "Timesteps: " << config_.numTimesteps << std::endl;
 }

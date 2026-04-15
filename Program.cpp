@@ -16,7 +16,6 @@
 
 #include "include/BusinessLogic/Builders/MonteCarloBuilder.hpp"
 #include "include/BusinessLogic/Mediators/MonteCarloMediator.hpp"
-#include "include/BusinessLogic/Factory/MediatorFactory.hpp"
 
 #include "include/Core/Domain/OptionData.hpp"
 #include "Core/Configuration/SimulationConfig.hpp"
@@ -26,7 +25,7 @@ int main()
 {
 	try {
 		// Load configuration from JSON
-		std::ifstream configFile("config/option_example.json");
+		std::ifstream configFile("config/monte_carlo_mediator.json");
 		if (!configFile.is_open()) {
 			std::cerr << "Error: Could not open config.json" << std::endl;
 			return 1;
@@ -43,13 +42,10 @@ int main()
 		SimulationOrchestrator orchestrator(config);
 
 		// Print configuration
-		orchestrator.printConfiguration();
+		//orchestrator.printConfiguration();
 
 		// Run simulation
 		orchestrator.run();
-		
-		// Print results
-		orchestrator.printResults();
 		
 		// Export to CSV
 		orchestrator.exportToCSV("results.csv");

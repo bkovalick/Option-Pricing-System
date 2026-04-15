@@ -43,7 +43,7 @@ SimulationConfig SimulationConfig::fromJson(const json& j)
         
         // Required numeric fields
         config.numSimulations = mediator.value("numSimulations", 10000);
-        config.numTimesteps = mediator.value("timesteps", 500);  // ✅ Default value if missing
+        config.numTimesteps = mediator.value("timesteps", 500);
         config.builderChoice = mediator.value("builderChoice", 1);
         
         // Parse options
