@@ -30,7 +30,6 @@ struct SimulationResult
     std::string mediatorType;
     std::string methodType;
     std::string algorithmDetail;
-    //std::string rngType;
     std::string executionMode;
     
     // Option parameters (for reference)

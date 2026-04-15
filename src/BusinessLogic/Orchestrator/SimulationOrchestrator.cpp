@@ -238,9 +238,9 @@ void SimulationOrchestrator::exportToCSV(const std::string& filename) const
         for (const auto& pricerResult : result.pricerResults) {
             file << result.instanceId << ","
                  << result.optionName << ","
-                 << result.sdeType << ","
-                 << result.fdmType << ","
-                 << result.rngType << ","
+                 << result.methodType << ","
+                 << result.algorithmDetail << ","
+                 << result.executionMode << ","
                  << pricerResult.pricerType << ","
                  << std::fixed << std::setprecision(10) << pricerResult.price << ","
                  << result.computationTime << ","
