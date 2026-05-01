@@ -2,10 +2,6 @@
   "mediator": {
     "type": "BlackScholes"
   },
-  "pricers": [],
-  "fdms": [],
-  "sdes": [],
-  "rngs": [],
   "options": [
     {
       "name": "Batch1_Call",

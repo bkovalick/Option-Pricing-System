@@ -111,7 +111,8 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceMonteCarlo(
     const OptionData& option,
     const ComponentConfig& component) const
 {
-    std::cout << "\n=== Building singular monte carlo simulation instance ===" << std::endl;
+    std::cout << "\n=== Building singular monte carlo simulation instance === " + 
+        std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
         instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName
     );
@@ -134,7 +135,8 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceBlackScholes(
     int instanceId,
     const OptionData& option) const
 {
-    std::cout << "\n=== Building singular black scholes simulation instance ===" << std::endl;
+    std::cout << "\n=== Building singular black scholes simulation instance === " + 
+        std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
         instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName
     );
@@ -147,7 +149,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceBlackScholes(
 void SimulationOrchestrator::attachPricers(SimulationInstance& simulationInstance, 
     const OptionData& option)
 {
-    std::cout << "\n=== Attaching Pricers to Options ===" << std::endl;
+    std::cout << "\n=== Attaching Pricers to Options === " + std::to_string(simulationInstance.instanceId_) << std::endl;
     int slot = 0;
     for (const auto& pricerType : config_.pricerTypes) {
         auto pricer = PricerFactory::createPricer(pricerType, option);
@@ -197,8 +199,8 @@ void SimulationOrchestrator::run()
         result.methodType = simulation.methodType_;
         result.algorithmDetail = simulation.algorithmDetail_;
         result.executionMode = simulation.executionMode_;
-        result.numSimulations = config_.numSimulations;
-        result.numTimesteps = config_.numTimesteps;
+        result.numSimulations = (config_.mediatorType == MediatorType::MonteCarlo) ? config_.numSimulations : 0;
+        result.numTimesteps = (config_.mediatorType == MediatorType::MonteCarlo) ? config_.numTimesteps : 0;
         result.computationTime = elapsed.count();
         
         // Extract pricer results
