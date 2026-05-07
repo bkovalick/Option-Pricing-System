@@ -81,9 +81,6 @@
     <ClCompile Include="src\businesslogic\pricers\EuropeanPricer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Factory\MediatorFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\BusinessLogic\Models\Greeks\GreeksCalculator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,6 +103,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Infrastructure\MarketDataGateway.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,9 +197,6 @@
     <ClInclude Include="include\core\domain\OptionData.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Factory\MediatorFactory.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\BusinessLogic\Models\Greeks\GreeksCalculator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -224,11 +227,34 @@
     <ClInclude Include="include\Core\Results\SimulationResults.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Core\Domain\SimulationInstance.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Core\Domain\ComponentConfig.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Mediators\BinomialTreeMediator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Infrastructure\MarketDataGateway.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Infrastructure\GatewayBase.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Makefile.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="config\option_example.json" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

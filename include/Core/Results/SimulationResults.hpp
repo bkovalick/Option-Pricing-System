@@ -28,9 +28,8 @@ struct SimulationResult
     
     // Configuration
     std::string mediatorType;
-    std::string sdeType;
-    std::string fdmType;
-    std::string rngType;
+    std::string methodType;
+    std::string algorithmDetail;
     std::string executionMode;
     
     // Option parameters (for reference)

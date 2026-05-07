@@ -126,11 +126,12 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\FdmFactory.cpp" />
-    <ClCompile Include="src\BusinessLogic\Factory\MediatorFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
+    <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DiscreteMilstein.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\EuropeanPricer.cpp" />
     <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp" />
+    <ClCompile Include="src\Infrastructure\MarketDataGateway.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp" />
@@ -161,9 +163,11 @@
     <ClInclude Include="include\BusinessLogic\Factory\PricerFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp" />
+    <ClInclude Include="include\BusinessLogic\Mediators\BinomialTreeMediator.hpp" />
+    <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Factory\MediatorFactory.hpp" />
+    <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp" />
     <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DiscreteMilstein.hpp" />
@@ -192,14 +196,20 @@
     <ClInclude Include="include\businesslogic\pricers\EuropeanPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\Pricer.hpp" />
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp" />
+    <ClInclude Include="include\Core\Domain\ComponentConfig.hpp" />
     <ClInclude Include="include\core\domain\OptionData.hpp" />
+    <ClInclude Include="include\Core\Domain\SimulationInstance.hpp" />
     <ClInclude Include="include\Core\Results\SimulationResults.hpp" />
+    <ClInclude Include="include\Infrastructure\GatewayBase.hpp" />
+    <ClInclude Include="include\Infrastructure\MarketDataGateway.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Makefile.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="config\option_example.json" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

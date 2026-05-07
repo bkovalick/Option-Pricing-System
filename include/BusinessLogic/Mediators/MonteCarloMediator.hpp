@@ -1,7 +1,3 @@
-// Author: Ben Kovalick
-// Purpose: Mediator header file, the main responsibility of this class is to coordinate 
-// the other components in the system.
-
 #ifndef MonteCarloMediator_HPP
 #define MonteCarloMediator_HPP
 
@@ -22,6 +18,7 @@
 #include "BusinessLogic/Models/RandomNumberGenerators/Rng.hpp" 
 #include "BusinessLogic/Mediators/Mediator.hpp"
 #include <BusinessLogic/Pricers/Pricer.hpp>
+#include <BusinessLogic/Models/BlackScholes/BlackScholes.hpp>
 
 template <typename T>
 using PathEvent = boost::signals2::signal<void(const T& t)>;
