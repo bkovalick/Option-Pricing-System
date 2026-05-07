@@ -46,7 +46,7 @@ void SimulationOrchestrator::createComponentsConfig()
     if (config_.mediatorType == MediatorType::BlackScholes ||
         config_.mediatorType == MediatorType::BinomialTree) {
 
-        componentConfigs_.emplace_back("Analytical", "Analytical", "Analytical");
+        //componentConfigs_.emplace_back("Analytical", "Analytical", "Analytical");
         std::cout << "Analytical mediator - using placeholder configuration" << std::endl;
         return;
     }

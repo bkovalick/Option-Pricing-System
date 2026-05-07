@@ -7,60 +7,29 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
-#include <mysql/jdbc.h> 
+#include <iomanip>
+#include <Infrastructure/GatewayBase.hpp>
 
-template<typename T>
-class GatewayBase
-{
-private:
-	std::string connString_;
-	std::unique_ptr<sql::Connection> connection_; // replace the string with a Connection type
-
-protected:
-	explicit GatewayBase(const std::string& connString) : connString_(connString)
-	{
-		connect();
-	}
-
-public:
-	virtual ~GatewayBase() = default;
-
-	void connect()
-	{
-		std::cout << "Connect to database using connection string." << std::endl;
-		try {
-			sql::Driver* driver = sql::mysql::get_driver_instance();
-			// Connect and store the handle
-			connection.reset(driver->connect(url, user, pass));
-		}
-		catch (sql::SQLException& e) {
-			throw std::runtime_error("Connection failed: " + std::string(e.what()));
-		}
-	}
-
-	bool isConnected() const;
-	void addToDatabase(const T& t);
-	T getFromDatabase(std::string sqlQuery);
-};
+using MarketDataResult = mysqlx::SqlResult;
+using MarketDataRow = mysqlx::RowResult;
 
 struct MarketData {
-	std::string runDate;
+	std::string date;
 	std::string ticker;
-	float priceOpen;
-	float priceClose;
-	float askPrice;
-	float bidPrice;
-	float midPrice;
+	double open;
+	double high;
+	double low;
+	double close;
+	long long volume;
+
+	MarketData()
+		: open(0.0), high(0.0), low(0.0), close(0.0), volume(0) {}
 };
 
 class MarketDataGateway : public GatewayBase<MarketData>
 {
-private:
-	std::string baseSql_ = "";
-	std::vector<MarketData> fullUniverse_;
-
 public:
-	explicit MarketDataGateway(const std::string& connString);
+	explicit MarketDataGateway(const std::string& connString, const std::string& schemaName);
 	~MarketDataGateway() = default;
 
 	MarketDataGateway(const MarketDataGateway&) = delete;
@@ -68,8 +37,11 @@ public:
 	MarketDataGateway(MarketDataGateway&&) = default;
 	MarketDataGateway& operator=(MarketDataGateway&&) = default;
 
-	std::vector<MarketData> getByTicker(std::string ticker);
-	std::vector<MarketData> getFullUniverseByDate(std::string runDate);
+	std::vector<MarketData> parseResultSet(MarketDataRow& results);
+	std::string toInsertStatement(const MarketData& data) const override;
+
+	std::vector<MarketData> getByTicker(const std::string& ticker);
+	std::vector<MarketData> getFullUniverseByDate(const std::string& runDate);
 };
 
 #endif 

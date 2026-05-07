@@ -108,6 +108,12 @@
     <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Infrastructure\MarketDataGateway.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp">
@@ -231,6 +237,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BusinessLogic\Mediators\BinomialTreeMediator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Infrastructure\MarketDataGateway.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Infrastructure\GatewayBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

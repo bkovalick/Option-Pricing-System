@@ -155,6 +155,7 @@
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\EuropeanPricer.cpp" />
     <ClCompile Include="src\Core\Configuration\SimulationConfig.cpp" />
+    <ClCompile Include="src\Infrastructure\MarketDataGateway.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp" />
@@ -199,6 +200,8 @@
     <ClInclude Include="include\core\domain\OptionData.hpp" />
     <ClInclude Include="include\Core\Domain\SimulationInstance.hpp" />
     <ClInclude Include="include\Core\Results\SimulationResults.hpp" />
+    <ClInclude Include="include\Infrastructure\GatewayBase.hpp" />
+    <ClInclude Include="include\Infrastructure\MarketDataGateway.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Makefile.txt" />

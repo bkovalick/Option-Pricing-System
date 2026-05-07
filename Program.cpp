@@ -42,9 +42,6 @@ int main()
 		// Create orchestrator
 		SimulationOrchestrator orchestrator(config);
 
-		// Print configuration
-		//orchestrator.printConfiguration();
-
 		// Run simulation
 		orchestrator.run();
 		
