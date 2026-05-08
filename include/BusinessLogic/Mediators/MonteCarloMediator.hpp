@@ -31,7 +31,6 @@ private:
 	std::shared_ptr<Sde> sde_;
 	std::shared_ptr<FdmBase> fdm_;
 	std::shared_ptr<Rng> rng_;
-
 	int NSim; 
 	std::vector<double> res;
 

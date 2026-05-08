@@ -28,6 +28,4 @@ void BlackScholesMediator::startOpenMP()
 }
 
 void BlackScholesMediator::disconnect()
-{
-
-}
+{}

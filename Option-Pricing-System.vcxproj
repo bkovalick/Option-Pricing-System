@@ -126,9 +126,11 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\FdmFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Factory\LatticeFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Mediators\BinomialTreeMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp" />

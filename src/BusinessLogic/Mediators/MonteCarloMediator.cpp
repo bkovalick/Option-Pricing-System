@@ -32,7 +32,6 @@ void MonteCarloMediator::start()
 	double VOld, VNew;
 	for (long i = 1; i <= NSim; ++i)
 	{
-
 		if ((i / 5000) * 5000 == i)
 		{
 			std::cout << i << std::endl;
@@ -44,7 +43,6 @@ void MonteCarloMediator::start()
 			VNew = fdm_->advance(VOld, fdm_->meshArray[n - 1], fdm_->k, rng_->gen(), rng_->gen());
 			res[n] = VNew; VOld = VNew;
 		}
-
 		path(res);
 	}
 	
@@ -84,7 +82,6 @@ void MonteCarloMediator::startOpenMP()
 void MonteCarloMediator::startPPL()
 {
 	double VOld, VNew;
-
 	concurrency::parallel_for(0, NSim, [&](int i)
 	{
 		if ((i / 5000) * 5000 == i)

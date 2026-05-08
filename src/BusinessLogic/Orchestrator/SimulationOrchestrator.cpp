@@ -94,6 +94,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstance(
     const OptionData& option,
     const ComponentConfig& component) const
 {
+    // convert everything from mediator to pricing engines (b.s., binomial, monte carlo).
     switch (config_.mediatorType) {
     case MediatorType::MonteCarlo:
         return createSimulationInstanceMonteCarlo(instanceId, option, component);

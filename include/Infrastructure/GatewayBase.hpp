@@ -128,6 +128,5 @@ template<typename T>
 bool GatewayBase<T>::isConnected() const
 {
 	return session_ != nullptr;
-
 }
 #endif
