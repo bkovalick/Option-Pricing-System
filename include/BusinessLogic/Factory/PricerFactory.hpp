@@ -9,7 +9,6 @@
 #include <BusinessLogic/Pricers/BrownianBridgePricer.hpp>
 #include <Core/Domain/OptionData.hpp>
 
-
 class PricerFactory {
 public:
 	static std::shared_ptr<Pricer> createPricer(const std::string& pricerType, const OptionData& opt);

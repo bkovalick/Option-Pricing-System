@@ -14,6 +14,13 @@ enum class MediatorType
     BinomialTree
 };
 
+enum class EngineType
+{
+    MonteCarlo,
+    BlackScholes,
+    BinomialTree
+};
+
 enum class ExecutionMode
 {
     SingleThreaded,
@@ -25,6 +32,7 @@ struct SimulationConfig
 {
     // Mediator configuration
     MediatorType mediatorType;
+    EngineType engineType;
     ExecutionMode executionMode;
     int numSimulations;
 	int numTimesteps;
@@ -43,6 +51,7 @@ struct SimulationConfig
     
     // Factory method to create from JSON
     static SimulationConfig fromJson(const nlohmann::json& json);
+    static SimulationConfig fromJsonEngine(const nlohmann::json& json);
     
     // Validation
     bool isValid() const;

@@ -6,12 +6,14 @@
 #include <map>
 #include <unordered_map>
 #include <BusinessLogic/Mediators/Mediator.hpp>
+#include <BusinessLogic/Engines/PricingEngine.hpp>
 
 struct SimulationInstance
 {
 public:
 	int instanceId_;
 	std::unique_ptr<Mediator> mediator_;
+	std::unique_ptr<PricingEngine> engine_;
 	std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
 	
 	std::string methodType_;       // "MonteCarlo", "BlackScholes", "BinomialTree"

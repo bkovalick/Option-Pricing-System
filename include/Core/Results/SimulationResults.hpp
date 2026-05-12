@@ -39,6 +39,7 @@ struct SimulationResult
     int numSimulations;
     int numTimesteps;
     double computationTime;  // seconds
+    double price;
     
     // Results from all pricers
     std::vector<PricerResult> pricerResults;
