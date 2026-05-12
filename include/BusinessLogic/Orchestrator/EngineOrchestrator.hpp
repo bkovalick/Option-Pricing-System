@@ -41,10 +41,10 @@ private:
     void createComponentsConfig();
     void initializeSimulations();
 
-    SimulationInstance createSimulationInstance(int instanceId, const OptionData& option,
-        const ComponentConfig& components);
+    //SimulationInstance createSimulationInstance(int instanceId, const OptionData& option,
+    //    const ComponentConfig& components);
     SimulationInstance createSimulationInstanceMonteCarlo(int instanceId, const OptionData& option,
-        const ComponentConfig& components);
+        const ComponentConfig& components, const std::shared_ptr<Pricer>& pricer, const std::string& pricerType);
     SimulationInstance createSimulationInstanceBlackScholes(int instanceId, const OptionData& option);
     SimulationInstance createSimulationInstancBinomialTree(int instanceId, const OptionData& option);
 

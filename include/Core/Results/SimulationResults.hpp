@@ -40,12 +40,13 @@ struct SimulationResult
     int numTimesteps;
     double computationTime;  // seconds
     double price;
-    
+    std::string pricerType;
+
     // Results from all pricers
     std::vector<PricerResult> pricerResults;
     
     SimulationResult() 
-        : instanceId(0), numSimulations(0), numTimesteps(0), computationTime(0.0),
+        : instanceId(0), numSimulations(0), numTimesteps(0), computationTime(0.0), price(0.0), pricerType("European"),
           optionParams("", 0, 0, 0, 0, 0, 0, 0, 0) {}
     
     // Add a pricer result

@@ -4,22 +4,14 @@ MonteCarloEngine::MonteCarloEngine(
     std::shared_ptr<Sde> sde, 
     std::shared_ptr<FdmBase> fdm, 
     std::shared_ptr<Rng> rng,
+    std::shared_ptr<Pricer> pricer,
 	int numSimulations)
-    : PricingEngine("MonteCarloEngine"), sde_(sde), fdm_(fdm), rng_(rng), numSimulations_(numSimulations)
+    : PricingEngine("MonteCarloEngine"), sde_(sde), fdm_(fdm), rng_(rng), pricer_(pricer), numSimulations_(numSimulations)
 {
-    if (!sde_ || !fdm_ || !rng_) {
+    if (!sde_ || !fdm_ || !rng_ || !pricer_) {
         throw std::invalid_argument("MonteCarloEngine: null components");
     }
     res.resize(fdm_->NT + 1);
-}
-
-void MonteCarloEngine::addPricer(std::shared_ptr<Pricer> pricer) 
-{
-    if (!pricer) {
-        throw std::invalid_argument("Pricer cannot be null");
-    }
-
-    pricer_ = std::move(pricer);
 }
 
 double MonteCarloEngine::computePrice()

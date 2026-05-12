@@ -20,17 +20,20 @@ public:
 	std::string algorithmDetail_;  // "GBM+Euler", "Analytical", "CRR"
 	std::string executionMode_;    // "Stochastic", "Deterministic", "Lattice"
 	std::string optionName_;
+	std::string pricerType_;	   // "European", "Asian", "Barrier"
 
 	SimulationInstance(int instanceId, 
 					  const std::string& methodType,
 					  const std::string& algorithmDetail, 
 					  const std::string& executionMode,
-					  const std::string& optionName) 
+					  const std::string& optionName,
+					  const std::string& pricerType) 
 		: instanceId_(instanceId), 
 		  methodType_(methodType),
 		  algorithmDetail_(algorithmDetail),
 		  executionMode_(executionMode),
-		  optionName_(optionName) {}
+		  optionName_(optionName),
+		  pricerType_(pricerType) {}
 	
 	SimulationInstance(SimulationInstance&&) = default;
 	SimulationInstance& operator=(SimulationInstance&&) = default;

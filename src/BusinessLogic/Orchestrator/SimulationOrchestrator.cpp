@@ -110,7 +110,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceMonteCarlo(
     std::cout << "\n=== Building singular monte carlo simulation instance === " + 
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName
+        instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName, option.OptionName
     );
 
     // Create components
@@ -135,7 +135,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceBlackScholes(
     std::cout << "\n=== Building singular black scholes simulation instance === " + 
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName
+        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName, option.OptionName
     );
 
 	auto blackScholesModel = std::make_shared<BlackScholes>(option);

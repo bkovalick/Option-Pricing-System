@@ -22,9 +22,9 @@ private:
 	std::shared_ptr<Sde> sde_;
 	std::shared_ptr<FdmBase> fdm_;
 	std::shared_ptr<Rng> rng_;
+	std::shared_ptr<Pricer> pricer_;
 	int numSimulations_;
 	std::vector<double> res;
-	std::shared_ptr<Pricer> pricer_;
 
 	void generatePath();
 
@@ -33,11 +33,11 @@ public:
 		std::shared_ptr<Sde> sde, 
 		std::shared_ptr<FdmBase> fdm, 
 		std::shared_ptr<Rng> rng,
+		std::shared_ptr<Pricer> pricer,
 		int numSimulations);
 	virtual ~MonteCarloEngine() = default;
 
 	double computePrice() override;
-	void addPricer(std::shared_ptr<Pricer> pricer);
 };
 
 #endif

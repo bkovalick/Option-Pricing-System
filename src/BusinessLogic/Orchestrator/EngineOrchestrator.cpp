@@ -11,8 +11,8 @@ std::string toString(const EngineType& engineType) {
     default:
         return "Unknown";
     }
-
 }
+
 EngineOrchestrator::EngineOrchestrator(const SimulationConfig& config)
     : config_(config)
 {
@@ -42,8 +42,6 @@ void EngineOrchestrator::createComponentsConfig()
     // For analytical mediators, create single placeholder config
     if (config_.engineType == EngineType::BlackScholes ||
         config_.engineType == EngineType::BinomialTree) {
-        std::cout << "Analytical mediator - using placeholder configuration" << std::endl;
-        componentConfigs_.emplace_back("None", "None", "None");
         return;
     }
 
@@ -68,62 +66,66 @@ void EngineOrchestrator::initializeSimulations()
     std::cout << "\n=== Building Simulation Instances ===" << std::endl;
     int instanceId = 0;
     for (const auto& option : options_) {
-        for (const auto& componentConfig : componentConfigs_) {
-            try {
-                auto simulationInstance = createSimulationInstance(instanceId, option, componentConfig);
+        try {
+            switch (config_.engineType) {
+
+            case EngineType::MonteCarlo: 
+            {
+                for (const auto& component : componentConfigs_) {
+                    for (const auto& pricerType : config_.pricerTypes) {
+                        auto pricer = PricerFactory::createPricer(pricerType, option);
+                        if (pricer) {
+                            auto simulationInstance = createSimulationInstanceMonteCarlo(
+                                instanceId, option, component, pricer, pricerType);
+                            simulationInstances_.push_back(std::move(simulationInstance));
+                            instanceId++;
+                        }
+                    }
+                }
+                break;
+            }
+            case EngineType::BlackScholes:
+            {
+                auto simulationInstance = createSimulationInstanceBlackScholes(instanceId, option);
                 simulationInstances_.push_back(std::move(simulationInstance));
                 instanceId++;
+                break;
             }
-            catch (const std::exception& e) {
-                std::cerr << "  Error creating instance " << instanceId << ": " << e.what() << std::endl;
+            case EngineType::BinomialTree:
+            {
+                auto simulationInstance = createSimulationInstancBinomialTree(instanceId, option);
+                simulationInstances_.push_back(std::move(simulationInstance));
+                instanceId++;
+                break;
+            }
+            default:
+                throw std::runtime_error("Unknown engine type");
             }
         }
-    }
-}
-
-SimulationInstance EngineOrchestrator::createSimulationInstance(
-    int instanceId,
-    const OptionData& option,
-    const ComponentConfig& component)
-{
-    switch (config_.engineType) {
-    case EngineType::MonteCarlo:
-        return createSimulationInstanceMonteCarlo(instanceId, option, component);
-
-    case EngineType::BlackScholes:
-        return createSimulationInstanceBlackScholes(instanceId, option);
-
-    case EngineType::BinomialTree:
-        return createSimulationInstancBinomialTree(instanceId, option);
-
-    default:
-        throw std::runtime_error("Unknown mediator type");
+        catch (const std::exception& e) {
+            std::cerr << "  Error creating instance " << instanceId << ": " << e.what() << std::endl;
+        }
     }
 }
 
 SimulationInstance EngineOrchestrator::createSimulationInstanceMonteCarlo(
     int instanceId,
     const OptionData& option,
-    const ComponentConfig& component)
+    const ComponentConfig& component,
+    const std::shared_ptr<Pricer>& pricer,
+    const std::string& pricerType)
 {
     std::cout << "\n=== Building singular monte carlo simulation instance === " +
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, "MonteCarlo", component.sdeType + component.fdmType, component.rngType, option.OptionName
+        instanceId, "MonteCarlo", component.sdeType + component.fdmType, component.rngType, option.OptionName, pricerType
     );
 
     auto sde = SdeFactory::createSde(component.sdeType, option);
     auto fdm = FdmFactory::createFdm(component.fdmType, option, sde, config_.numTimesteps);
     auto rng = RngFactory::createRng(component.rngType);
 
-    auto engine = std::make_unique<MonteCarloEngine>(sde, fdm, rng, config_.numSimulations);
-    for (const auto& pricerType : config_.pricerTypes) {
-        auto pricer = PricerFactory::createPricer(pricerType, option);
-        if (pricer) {
-            pricers_.push_back(pricer);
-        }
-    }
-
+    auto engine = std::make_unique<MonteCarloEngine>(sde, fdm, rng, pricer, config_.numSimulations);
     simulationInstance.engine_ = std::move(engine);
     return simulationInstance;
 }
@@ -135,7 +137,7 @@ SimulationInstance EngineOrchestrator::createSimulationInstanceBlackScholes(
     std::cout << "\n=== Building singular black scholes simulation instance === " +
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName
+        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName, option.OptionName
     );
 
     auto blackScholesModel = std::make_shared<BlackScholes>(option);
@@ -148,7 +150,7 @@ SimulationInstance EngineOrchestrator::createSimulationInstancBinomialTree(int i
     std::cout << "\n=== Building binomial tree simulation instance === " +
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, "BinomialTree", "Analytical", "Deterministic", option.OptionName
+        instanceId, "BinomialTree", "Analytical", "Deterministic", option.OptionName, option.OptionName
     );
 
     return simulationInstance;
@@ -157,49 +159,26 @@ SimulationInstance EngineOrchestrator::createSimulationInstancBinomialTree(int i
 void EngineOrchestrator::run()
 {
     for (const auto& simulation : simulationInstances_) {
-        SimulationResult result;
-
         auto engine = simulation.engine_.get();
-        if (simulation.methodType_ == "MonteCarlo") {
-            //auto* mcEngine = dynamic_cast<MonteCarloEngine*>(simulation.engine_.get());
+        auto start = std::chrono::high_resolution_clock::now();
+        double price = engine->computePrice();
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
 
-            for (auto& pricer : pricers_) {
-                if (pricer) {
-                    /*mcEngine->addPricer(std::move(pricer));*/
-                    engine->addPricer(std::move(pricer));
-                    auto start = std::chrono::high_resolution_clock::now();
-                    double price = engine->computePrice();
-                    auto end = std::chrono::high_resolution_clock::now();
-                    std::chrono::duration<double> elapsed = end - start;
-
-                    result.instanceId = simulation.instanceId_;
-                    result.optionName = simulation.optionName_;
-                    result.methodType = simulation.methodType_;
-                    result.algorithmDetail = simulation.algorithmDetail_;
-                    result.executionMode = simulation.executionMode_;
-                    result.price = price;
-                    result.numSimulations = config_.numSimulations;
-                    result.numTimesteps = config_.numTimesteps;
-                    result.computationTime = elapsed.count();
-                    results_.addResult(result);
-                }
-            }
+        SimulationResult result;
+        result.instanceId = simulation.instanceId_;
+        result.optionName = simulation.optionName_;
+        result.methodType = simulation.methodType_;
+        result.algorithmDetail = simulation.algorithmDetail_;
+        result.executionMode = simulation.executionMode_;
+        result.price = price;
+        result.computationTime = elapsed.count();
+        if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
+            result.pricerType = simulation.pricerType_;
+            result.numSimulations = config_.numSimulations;
+            result.numTimesteps = config_.numTimesteps;
         }
-        else {
-            auto start = std::chrono::high_resolution_clock::now();
-            double price = engine->computePrice();
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> elapsed = end - start;
-
-            result.instanceId = simulation.instanceId_;
-            result.optionName = simulation.optionName_;
-            result.methodType = simulation.methodType_;
-            result.algorithmDetail = simulation.algorithmDetail_;
-            result.executionMode = simulation.executionMode_;
-            result.price = price;
-            result.computationTime = elapsed.count();
-            results_.addResult(result);
-        }
+        results_.addResult(result);
     }
 }
 
@@ -212,22 +191,21 @@ void EngineOrchestrator::exportToCSV(const std::string& filename) const
     }
 
     // Header
-    file << "InstanceID,OptionName,SDE,FDM,RNG,PricerType,Price,ComputationTime,NumSimulations\n";
+    file << "InstanceID,OptionName,MethodType,Algorithm,ExecutionMode,PricerType,Price,ComputationTime,NumSimulations,NumTimesteps\n";
 
     // Data
     const auto& allResults = results_.getResults();
     for (const auto& result : allResults) {
-        for (const auto& pricerResult : result.pricerResults) {
-            file << result.instanceId << ","
-                << result.optionName << ","
-                << result.methodType << ","
-                << result.algorithmDetail << ","
-                << result.executionMode << ","
-                << pricerResult.pricerType << ","
-                << std::fixed << std::setprecision(10) << pricerResult.price << ","
-                << result.computationTime << ","
-                << result.numSimulations << "\n";
-        }
+        file << result.instanceId << ","
+            << result.optionName << ","
+            << result.methodType << ","
+            << result.algorithmDetail << ","
+            << result.executionMode << ","
+            << result.pricerType << ","
+            << std::fixed << std::setprecision(10) << result.price << ","
+            << result.computationTime << ","
+            << result.numSimulations << ","
+            << result.numTimesteps << "\n";
     }
 
     file.close();
