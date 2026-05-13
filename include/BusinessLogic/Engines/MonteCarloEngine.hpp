@@ -38,6 +38,9 @@ public:
 	virtual ~MonteCarloEngine() = default;
 
 	double computePrice() override;
+	double startSingleThreaded();
+	double startOpenMP();
+	double startPPL();
 };
 
 #endif

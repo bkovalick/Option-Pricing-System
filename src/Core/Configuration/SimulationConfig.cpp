@@ -67,7 +67,6 @@ SimulationConfig SimulationConfig::fromJsonEngine(const json& j)
                 opt.value("dividend", 0.0),
                 opt.value("optionType", 1),
                 opt.value("interestRate", 0.05),
-                opt.value("beta", 1.0),
                 opt.value("initialPrice", 100.0)
             );
         }
@@ -182,7 +181,6 @@ SimulationConfig SimulationConfig::fromJson(const json& j)
                 opt.value("dividend", 0.0),
                 opt.value("optionType", 1),
                 opt.value("interestRate", 0.05),
-                opt.value("beta", 1.0),
                 opt.value("initialPrice", 100.0)
             );
         }

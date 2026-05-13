@@ -28,8 +28,8 @@ int main()
 		// Load configuration from JSON
 		/*std::ifstream configFile("config/monte_carlo_mediator.json");*/
 		/*std::ifstream configFile("config/black_scholes_mediator.json");*/
-		/*std::ifstream configFile("config/black_scholes_engine.json");*/
-		std::ifstream configFile("config/monte_carlo_engine.json");
+		std::ifstream configFile("config/black_scholes_engine.json");
+		//std::ifstream configFile("config/monte_carlo_engine.json");
 		if (!configFile.is_open()) {
 			std::cerr << "Error: Could not open config.json" << std::endl;
 			return 1;

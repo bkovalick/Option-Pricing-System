@@ -33,6 +33,22 @@ double MonteCarloEngine::computePrice()
     return pricer_->Price();
 }
 
+// not sure if I want to do this yet.
+double MonteCarloEngine::startSingleThreaded() 
+{
+    return 0.0;
+}
+
+double MonteCarloEngine::startOpenMP()
+{
+    return 0.0;
+}
+
+double MonteCarloEngine::startPPL()
+{
+    return 0.0;
+}
+
 void MonteCarloEngine::generatePath() 
 {
     double VOld, VNew;
