@@ -20,7 +20,7 @@
 
 class FdmFactory {
 public:
-	static std::shared_ptr<FdmBase> FdmFactory::createFdm(const std::string& fdmType,
+	static std::shared_ptr<FdmBase> createFdm(const std::string& fdmType,
 		const OptionData& opt, std::shared_ptr<Sde> sde, int NT);
 };
 

@@ -22,6 +22,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{36566458-31DD-6B5A-A271-20012A755DED}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,6 +90,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>$(ProjectDir)include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -113,6 +115,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>$(ProjectDir)include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,10 +128,14 @@
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp" />
+    <ClCompile Include="src\BusinessLogic\Engines\BlackScholesEngine.cpp" />
+    <ClCompile Include="src\BusinessLogic\Engines\MonteCarloEngine.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\FdmFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Factory\LatticeFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp" />
+    <ClCompile Include="src\BusinessLogic\Engines\BinomialTreeEngine.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp" />
@@ -149,6 +156,7 @@
     <ClCompile Include="src\businesslogic\models\randomnumbergenerators\MersenneTwister.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\CEV.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\GBM.cpp" />
+    <ClCompile Include="src\BusinessLogic\Orchestrator\EngineOrchestrator.cpp" />
     <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp" />
     <ClCompile Include="src\businesslogic\pricers\AsianPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BarrierPricer.cpp" />
@@ -159,11 +167,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp" />
+    <ClInclude Include="include\BusinessLogic\Engines\BlackScholesEngine.hpp" />
+    <ClInclude Include="include\BusinessLogic\Engines\MonteCarloEngine.hpp" />
+    <ClInclude Include="include\BusinessLogic\Engines\PricingEngine.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\FdmFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\PricerFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\BinomialTreeMediator.hpp" />
+    <ClInclude Include="include\BusinessLogic\Engines\BinomialTreeEngine.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp" />
@@ -189,6 +200,7 @@
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\CEV.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\GBM.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\Sde.hpp" />
+    <ClInclude Include="include\BusinessLogic\Orchestrator\EngineOrchestrator.hpp" />
     <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp" />
     <ClInclude Include="include\businesslogic\pricers\AsianPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BarrierPricer.hpp" />
@@ -197,6 +209,7 @@
     <ClInclude Include="include\businesslogic\pricers\Pricer.hpp" />
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp" />
     <ClInclude Include="include\Core\Domain\ComponentConfig.hpp" />
+    <ClInclude Include="include\Core\Domain\Greeks.hpp" />
     <ClInclude Include="include\core\domain\OptionData.hpp" />
     <ClInclude Include="include\Core\Domain\SimulationInstance.hpp" />
     <ClInclude Include="include\Core\Results\SimulationResults.hpp" />

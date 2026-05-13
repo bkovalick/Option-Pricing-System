@@ -25,7 +25,7 @@ private:
 
 protected:
 	explicit GatewayBase(const std::string& connString, const std::string& schemaName);
-	mysqlx::RowResult executeQuery(const std::string& sqlQuery, const std::vector<mysqlx::Value>& params = {});
+	mysqlx::RowResult executeQuery(const std::string& sqlQuery, const std::vector<mysqlx::Value>& params);
 	
 
 public:
@@ -61,7 +61,7 @@ void GatewayBase<T>::connect(const std::string& schemaName)
 }
 
 template<typename T>
-mysqlx::RowResult GatewayBase<T>::executeQuery(const std::string& sqlQuery, const std::vector<mysqlx::Value>& params = {})
+mysqlx::RowResult GatewayBase<T>::executeQuery(const std::string& sqlQuery, const std::vector<mysqlx::Value>& params)
 {
 	ensureConnected();
 	try {
@@ -128,6 +128,5 @@ template<typename T>
 bool GatewayBase<T>::isConnected() const
 {
 	return session_ != nullptr;
-
 }
 #endif

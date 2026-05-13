@@ -24,9 +24,6 @@ SimulationOrchestrator::SimulationOrchestrator(const SimulationConfig& config)
 void SimulationOrchestrator::initializeOptions()
 {
     std::cout << "=== Initializing Simulation Orchestrator ===" << std::endl;
-    std::cout << "Mediator Type: " << static_cast<int>(config_.mediatorType) << std::endl;
-    std::cout << "Execution Mode: " << static_cast<int>(config_.executionMode) << std::endl;
-    std::cout << "Number of Simulations per Mediator: " << config_.numSimulations << std::endl;
     
     options_.clear();
     options_.reserve(config_.options.size());
@@ -45,8 +42,6 @@ void SimulationOrchestrator::createComponentsConfig()
     // For analytical mediators, create single placeholder config
     if (config_.mediatorType == MediatorType::BlackScholes ||
         config_.mediatorType == MediatorType::BinomialTree) {
-
-        //componentConfigs_.emplace_back("Analytical", "Analytical", "Analytical");
         std::cout << "Analytical mediator - using placeholder configuration" << std::endl;
         return;
     }
@@ -94,6 +89,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstance(
     const OptionData& option,
     const ComponentConfig& component) const
 {
+    // convert everything from mediator to pricing engines (b.s., binomial, monte carlo).
     switch (config_.mediatorType) {
     case MediatorType::MonteCarlo:
         return createSimulationInstanceMonteCarlo(instanceId, option, component);
@@ -114,9 +110,10 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceMonteCarlo(
     std::cout << "\n=== Building singular monte carlo simulation instance === " + 
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName
+        instanceId, component.sdeType, component.fdmType, component.rngType, option.OptionName, option.OptionName
     );
 
+    // Create components
     auto sde = SdeFactory::createSde(component.sdeType, option);
     auto fdm = FdmFactory::createFdm(component.fdmType, option, sde, config_.numTimesteps);
     auto rng = RngFactory::createRng(component.rngType);
@@ -138,7 +135,7 @@ SimulationInstance SimulationOrchestrator::createSimulationInstanceBlackScholes(
     std::cout << "\n=== Building singular black scholes simulation instance === " + 
         std::to_string(instanceId) << std::endl;
     SimulationInstance simulationInstance(
-        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName
+        instanceId, "BlackScholes", "Analytical", "Deterministic", option.OptionName, option.OptionName
     );
 
 	auto blackScholesModel = std::make_shared<BlackScholes>(option);

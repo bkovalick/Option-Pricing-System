@@ -1,7 +1,6 @@
 #ifndef BinomialTreeModel_HPP
 #define BinomialTreeModel_HPP
 
-
 #include <vector>
 
 using Matrix = std::vector<std::vector<int>>;
@@ -12,7 +11,7 @@ private:
 	int numSteps_;
 
 public:
-	explicit BinomialTreeModel(int numSteps);
+	explicit BinomialTreeModel(int numSteps) : numSteps_(numSteps) {}
 	~BinomialTreeModel() = default;
 
 	BinomialTreeModel(const BinomialTreeModel& model) = delete;
@@ -20,6 +19,10 @@ public:
 
 	BinomialTreeModel(BinomialTreeModel&& model) = default;
 	BinomialTreeModel& operator=(BinomialTreeModel&& model) = default;
+
+	double getPrice(int numSteps) {
+		return 0.0;
+	}
 };
 
 #endif

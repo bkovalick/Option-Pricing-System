@@ -2,20 +2,23 @@
 #define GreeksCalculator_HPP
 
 #include "Core/Domain/OptionData.hpp"
+#include <Core/Domain/Greeks.hpp>
+#include <memory>
 
 class GreeksCalculator {
 private:
-	OptionData optionData_;
+	std::shared_ptr<OptionData> optionData_;
+
+	double calculateDelta() const;
+	double calculateGamma() const;
+	double calculateVega() const;
+	double calculateTheta() const;
+	double calculateRho() const;
 
 public:
-	GreeksCalculator() = default;
-	GreeksCalculator(const OptionData& optData);
+	explicit GreeksCalculator(const std::shared_ptr<OptionData>& optionData);
 	virtual ~GreeksCalculator() = default;
 
-	virtual double calculateDelta() const;
-	virtual double calculateGamma() const;
-	virtual double calculateVega() const;
-	virtual double calculateTheta() const;
-	virtual double calculateRho() const;
+	Greeks getGreeks() const;
 };
 #endif // !
