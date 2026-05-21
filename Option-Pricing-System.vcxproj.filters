@@ -93,9 +93,6 @@
     <ClCompile Include="src\BusinessLogic\Factory\PricerFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -222,9 +219,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Configuration\SimulationConfig.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BusinessLogic\Factory\PricerFactory.hpp">

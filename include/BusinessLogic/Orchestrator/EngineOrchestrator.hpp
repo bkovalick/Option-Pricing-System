@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <fstream>
 #include <execution>
+#include <algorithm>
 
 #include <Core/Configuration/SimulationConfig.hpp>
 #include <Core/Results/SimulationResults.hpp>
@@ -36,18 +37,26 @@ private:
     std::vector<SimulationInstance> simulationInstances_;
     std::vector<OptionData> options_;
     std::vector<std::shared_ptr<Pricer>> pricers_;
-    SimulationResultsContainer results_;
+    std::vector<SimulationResult> results_;
 
     void initializeOptions();
     void createComponentsConfig();
     void initializeSimulations();
 
-    //SimulationInstance createSimulationInstance(int instanceId, const OptionData& option,
-    //    const ComponentConfig& components);
-    SimulationInstance createSimulationInstanceMonteCarlo(int instanceId, const OptionData& option,
-        const ComponentConfig& components, const std::shared_ptr<Pricer>& pricer, const std::string& pricerType);
-    SimulationInstance createSimulationInstanceBlackScholes(int instanceId, const OptionData& option);
-    SimulationInstance createSimulationInstancBinomialTree(int instanceId, const OptionData& option);
+    SimulationInstance createSimulationInstanceMonteCarlo(
+        int instanceId, 
+        const OptionData& option,
+        const ComponentConfig& components, 
+        const std::shared_ptr<Pricer>& pricer, 
+        const std::string& pricerType);
+
+    SimulationInstance createSimulationInstanceBlackScholes(
+        int instanceId, 
+        const OptionData& option);
+
+    SimulationInstance createSimulationInstancBinomialTree(
+        int instanceId, 
+        const OptionData& option);
 
 public:
 	explicit EngineOrchestrator(const SimulationConfig& config);
@@ -60,7 +69,7 @@ public:
 
 	void run();
     void exportToCSV(const std::string& filename) const;
-    const SimulationResultsContainer& getResults() const { return results_; }
+    const std::vector<SimulationResult>& getResults() const { return results_; }
 };
 
 #endif 

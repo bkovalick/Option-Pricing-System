@@ -51,10 +51,6 @@ struct SimulationConfig
     
     // Factory method to create from JSON
     static SimulationConfig fromJson(const nlohmann::json& json);
-    static SimulationConfig fromJsonEngine(const nlohmann::json& json);
-    
-    // Validation
-    bool isValid() const;
 };
 
 #endif

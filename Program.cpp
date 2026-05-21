@@ -19,15 +19,12 @@
 
 #include "include/Core/Domain/OptionData.hpp"
 #include "Core/Configuration/SimulationConfig.hpp"
-#include "BusinessLogic/Orchestrator/SimulationOrchestrator.hpp"
 #include "BusinessLogic/Orchestrator/EngineOrchestrator.hpp"
 
 int main()
 {
 	try {
 		// Load configuration from JSON
-		/*std::ifstream configFile("config/monte_carlo_mediator.json");*/
-		/*std::ifstream configFile("config/black_scholes_mediator.json");*/
 		std::ifstream configFile("config/black_scholes_engine.json");
 		//std::ifstream configFile("config/monte_carlo_engine.json");
 		if (!configFile.is_open()) {
@@ -40,11 +37,9 @@ int main()
 		configFile.close();
 
 		// Create configuration from JSON
-		/*auto config = SimulationConfig::fromJson(configJson);*/
-		auto config = SimulationConfig::fromJsonEngine(configJson);
+		auto config = SimulationConfig::fromJson(configJson);
 
 		// Create orchestrator
-		//SimulationOrchestrator orchestrator(config);
 		EngineOrchestrator orchestrator(config);
 
 		// Run simulation

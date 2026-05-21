@@ -157,7 +157,6 @@
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\CEV.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\GBM.cpp" />
     <ClCompile Include="src\BusinessLogic\Orchestrator\EngineOrchestrator.cpp" />
-    <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp" />
     <ClCompile Include="src\businesslogic\pricers\AsianPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BarrierPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
@@ -201,7 +200,6 @@
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\GBM.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\Sde.hpp" />
     <ClInclude Include="include\BusinessLogic\Orchestrator\EngineOrchestrator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp" />
     <ClInclude Include="include\businesslogic\pricers\AsianPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BarrierPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BrownianBridgePricer.hpp" />

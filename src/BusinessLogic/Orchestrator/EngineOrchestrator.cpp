@@ -159,32 +159,44 @@ SimulationInstance EngineOrchestrator::createSimulationInstancBinomialTree(int i
 void EngineOrchestrator::run()
 {
     auto start = std::chrono::high_resolution_clock::now();
-    std::for_each(std::execution::par,
+
+    results_.resize(simulationInstances_.size());
+
+    std::transform(std::execution::par,
         simulationInstances_.begin(),
         simulationInstances_.end(),
+        results_.begin(),
         [this](const SimulationInstance& simulation) {
-            auto engine = simulation.engine_.get();
-            auto start = std::chrono::high_resolution_clock::now();
-            double price = engine->computePrice();
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> elapsed = end - start;
 
-            // add option data to result?
             SimulationResult result;
-            result.instanceId = simulation.instanceId_;
-            result.optionName = simulation.optionName_;
-            result.methodType = simulation.methodType_;
-            result.algorithmDetail = simulation.algorithmDetail_;
-            result.executionMode = simulation.executionMode_;
-            result.price = price;
-            result.computationTime = elapsed.count();
-            if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
+
+            try {
+                auto start = std::chrono::high_resolution_clock::now();
+                double price = simulation.engine_->computePrice();
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = end - start;
+
+                result.instanceId = simulation.instanceId_;
+                result.optionName = simulation.optionName_;
+                result.methodType = simulation.methodType_;
+                result.algorithmDetail = simulation.algorithmDetail_;
+                result.executionMode = simulation.executionMode_;
                 result.pricerType = simulation.pricerType_;
-                result.numSimulations = config_.numSimulations;
-                result.numTimesteps = config_.numTimesteps;
+                result.price = price;
+                result.computationTime = elapsed.count();
+                if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
+                    result.numSimulations = config_.numSimulations;
+                    result.numTimesteps = config_.numTimesteps;
+                }
             }
-            results_.addResult(result);
+            catch (const std::exception& e) {
+                std::cerr << "Error in instance " << simulation.instanceId_
+                          << ": " << e.what() << std::endl;
+            }
+
+            return result;
         });
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     std::cout << "Parallel Elapsed Time " << elapsed << std::endl;
@@ -202,8 +214,7 @@ void EngineOrchestrator::exportToCSV(const std::string& filename) const
     file << "InstanceID,OptionName,MethodType,Algorithm,ExecutionMode,PricerType,Price,ComputationTime,NumSimulations,NumTimesteps\n";
 
     // Data
-    const auto& allResults = results_.getResults();
-    for (const auto& result : allResults) {
+    for (const auto& result : results_) {
         file << result.instanceId << ","
             << result.optionName << ","
             << result.methodType << ","
