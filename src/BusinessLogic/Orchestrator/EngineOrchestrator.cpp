@@ -158,63 +158,36 @@ SimulationInstance EngineOrchestrator::createSimulationInstancBinomialTree(int i
 
 void EngineOrchestrator::run()
 {
-    //auto start = std::chrono::high_resolution_clock::now();
-    //std::for_each(std::execution::par,
-    //    simulationInstances_.begin(),
-    //    simulationInstances_.end(),
-    //    [this](const SimulationInstance& simulation) {
-    //        auto engine = simulation.engine_.get();
-    //        auto start = std::chrono::high_resolution_clock::now();
-    //        double price = engine->computePrice();
-    //        auto end = std::chrono::high_resolution_clock::now();
-    //        std::chrono::duration<double> elapsed = end - start;
-
-    //        SimulationResult result;
-    //        result.instanceId = simulation.instanceId_;
-    //        result.optionName = simulation.optionName_;
-    //        result.methodType = simulation.methodType_;
-    //        result.algorithmDetail = simulation.algorithmDetail_;
-    //        result.executionMode = simulation.executionMode_;
-    //        result.price = price;
-    //        result.computationTime = elapsed.count();
-    //        if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
-    //            result.pricerType = simulation.pricerType_;
-    //            result.numSimulations = config_.numSimulations;
-    //            result.numTimesteps = config_.numTimesteps;
-    //        }
-    //        results_.addResult(result);
-    //    });
-    //auto end = std::chrono::high_resolution_clock::now();
-    //std::chrono::duration<double> elapsed = end - start;
-    //std::cout << "Parallel Elapsed Time " << elapsed << std::endl;
-
     auto start = std::chrono::high_resolution_clock::now();
-    for (const auto& simulation : simulationInstances_) {
-        auto engine = simulation.engine_.get();
-        auto start = std::chrono::high_resolution_clock::now();
-        double price = engine->computePrice();
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = end - start;
+    std::for_each(std::execution::par,
+        simulationInstances_.begin(),
+        simulationInstances_.end(),
+        [this](const SimulationInstance& simulation) {
+            auto engine = simulation.engine_.get();
+            auto start = std::chrono::high_resolution_clock::now();
+            double price = engine->computePrice();
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
 
-        SimulationResult result;
-        result.instanceId = simulation.instanceId_;
-        result.optionName = simulation.optionName_;
-        result.methodType = simulation.methodType_;
-        result.algorithmDetail = simulation.algorithmDetail_;
-        result.executionMode = simulation.executionMode_;
-        result.price = price;
-        result.computationTime = elapsed.count();
-        if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
-            result.pricerType = simulation.pricerType_;
-            result.numSimulations = config_.numSimulations;
-            result.numTimesteps = config_.numTimesteps;
-        }
-        results_.addResult(result);
-    }
-
+            // add option data to result?
+            SimulationResult result;
+            result.instanceId = simulation.instanceId_;
+            result.optionName = simulation.optionName_;
+            result.methodType = simulation.methodType_;
+            result.algorithmDetail = simulation.algorithmDetail_;
+            result.executionMode = simulation.executionMode_;
+            result.price = price;
+            result.computationTime = elapsed.count();
+            if (simulation.methodType_ == toString(EngineType::MonteCarlo)) {
+                result.pricerType = simulation.pricerType_;
+                result.numSimulations = config_.numSimulations;
+                result.numTimesteps = config_.numTimesteps;
+            }
+            results_.addResult(result);
+        });
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    std::cout << "Sequential Elapsed Time " << elapsed << std::endl;
+    std::cout << "Parallel Elapsed Time " << elapsed << std::endl;
 }
 
 void EngineOrchestrator::exportToCSV(const std::string& filename) const
