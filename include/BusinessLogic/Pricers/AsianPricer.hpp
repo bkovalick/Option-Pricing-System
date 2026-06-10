@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 
 class AsianPricer : public Pricer
 {
@@ -16,21 +17,21 @@ private:
 	double price;
 	double sum;
 	int NSim;
-	double avg = 0.0;  // Arithmetic average at the fixing points
+	double avg = 0.0;
 	double max = 0.0;
 
 public:
-	AsianPricer(const Payoff& payoff, const Discount& discounter); // Argument Constructor
-	virtual ~AsianPricer(); // Destructor
+	AsianPricer(const Payoff& payoff, const Discount& discounter);
+	virtual ~AsianPricer();
 
-	double Average(const std::vector<double>& vec); // compute arithemtic avg.
-	double Geometric(const std::vector<double>& vec); // compute geometric avg.
-	double Max(const std::vector<double>& vec); // find max
+	double Average(const std::vector<double>& vec);
+	double Geometric(const std::vector<double>& vec);
+	double Max(const std::vector<double>& vec);
 
-	void ProcessPath(const std::vector<double>& t); // A path for each simulation draw.
-	double DiscountFactor(); // Discounting
-	void PostProcess(); // Notify end of simulation
-	double Price(); // Option Price
+	void ProcessPath(const std::vector<double>& t);
+	double DiscountFactor();
+	void PostProcess();
+	double Price();
 };
 
-#endif // !AsianPricer_HPP
+#endif

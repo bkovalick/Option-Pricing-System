@@ -1,8 +1,8 @@
 {
   "engine": {
     "type": "MonteCarlo",
-    "executionMode": "single-threaded",
-    "numSimulations": 10000,
+    "executionMode": "openmp",
+    "numSimulations": 100000,
     "timesteps": 500,
     "builderChoice": 1
   },

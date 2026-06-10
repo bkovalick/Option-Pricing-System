@@ -125,7 +125,7 @@ SimulationInstance EngineOrchestrator::createSimulationInstanceMonteCarlo(
     auto fdm = FdmFactory::createFdm(component.fdmType, option, sde, config_.numTimesteps);
     auto rng = RngFactory::createRng(component.rngType);
 
-    auto engine = std::make_unique<MonteCarloEngine>(sde, fdm, rng, pricer, config_.numSimulations);
+    auto engine = std::make_unique<MonteCarloEngine>(sde, fdm, rng, pricer, config_.numSimulations, config_.executionMode);
     simulationInstance.engine_ = std::move(engine);
     return simulationInstance;
 }

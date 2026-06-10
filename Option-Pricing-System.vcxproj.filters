@@ -21,9 +21,6 @@
     <ClCompile Include="src\BusinessLogic\Builders\MonteCarloBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,9 +99,6 @@
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -129,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BusinessLogic\Builders\MonteCarloBuilder.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp">
@@ -212,9 +203,6 @@
     <ClInclude Include="include\BusinessLogic\Models\Greeks\GreeksCalculator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -240,9 +228,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Core\Domain\ComponentConfig.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp">

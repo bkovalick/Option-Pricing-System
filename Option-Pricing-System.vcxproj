@@ -136,8 +136,6 @@
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Engines\BinomialTreeEngine.cpp" />
-    <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp" />
-    <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp" />
@@ -174,9 +172,6 @@
     <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Engines\BinomialTreeEngine.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp" />
     <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp" />
