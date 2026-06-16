@@ -5,14 +5,13 @@
 #include <memory>
 #include <map>
 #include <unordered_map>
-#include <BusinessLogic/Mediators/Mediator.hpp>
 #include <BusinessLogic/Engines/PricingEngine.hpp>
+#include <BusinessLogic/Pricers/Pricer.hpp>
 
 struct SimulationInstance
 {
 public:
 	int instanceId_;
-	std::unique_ptr<Mediator> mediator_;
 	std::unique_ptr<PricingEngine> engine_;
 	std::unordered_map<std::string, std::shared_ptr<Pricer>> pricers_;
 	

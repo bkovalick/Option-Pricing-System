@@ -136,8 +136,6 @@
     <ClCompile Include="src\BusinessLogic\Factory\RngFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Factory\SdeFactory.cpp" />
     <ClCompile Include="src\BusinessLogic\Engines\BinomialTreeEngine.cpp" />
-    <ClCompile Include="src\BusinessLogic\Mediators\BlackScholesMediator.cpp" />
-    <ClCompile Include="src\BusinessLogic\Mediators\MonteCarloMediator.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.cpp" />
     <ClCompile Include="src\BusinessLogic\Models\BlackScholes\BlackScholes.cpp" />
     <ClCompile Include="src\businesslogic\models\finitedifferencemethods\DerivativeFree.cpp" />
@@ -157,7 +155,6 @@
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\CEV.cpp" />
     <ClCompile Include="src\businesslogic\models\stochasticdifferentialequations\GBM.cpp" />
     <ClCompile Include="src\BusinessLogic\Orchestrator\EngineOrchestrator.cpp" />
-    <ClCompile Include="src\BusinessLogic\Orchestrator\SimulationOrchestrator.cpp" />
     <ClCompile Include="src\businesslogic\pricers\AsianPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BarrierPricer.cpp" />
     <ClCompile Include="src\businesslogic\pricers\BrownianBridgePricer.cpp" />
@@ -175,9 +172,6 @@
     <ClInclude Include="include\BusinessLogic\Factory\RngFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Factory\SdeFactory.hpp" />
     <ClInclude Include="include\BusinessLogic\Engines\BinomialTreeEngine.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\BlackScholesMediator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\Mediator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Mediators\MonteCarloMediator.hpp" />
     <ClInclude Include="include\BusinessLogic\Models\BinomialTreeModel\BinomialTreeModel.hpp" />
     <ClInclude Include="include\BusinessLogic\Models\BlackScholes\BlackScholes.hpp" />
     <ClInclude Include="include\businesslogic\models\finitedifferencemethods\DerivativeFree.hpp" />
@@ -201,7 +195,6 @@
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\GBM.hpp" />
     <ClInclude Include="include\businesslogic\models\stochasticdifferentialequations\Sde.hpp" />
     <ClInclude Include="include\BusinessLogic\Orchestrator\EngineOrchestrator.hpp" />
-    <ClInclude Include="include\BusinessLogic\Orchestrator\SimulationOrchestrator.hpp" />
     <ClInclude Include="include\businesslogic\pricers\AsianPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BarrierPricer.hpp" />
     <ClInclude Include="include\businesslogic\pricers\BrownianBridgePricer.hpp" />

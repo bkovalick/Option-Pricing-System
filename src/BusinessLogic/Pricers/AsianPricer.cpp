@@ -18,34 +18,31 @@ AsianPricer::~AsianPricer()
 // compute arithemtic avg.
 inline double AsianPricer::Average(const std::vector<double>& vec)
 {
-	double avg = vec[0];
-
-	for (const auto& elem : vec)
-		avg += elem;
-
-	return avg / vec.size();
+	if (vec.empty()) return 0.0;
+	auto sum = std::accumulate(vec.begin(), vec.end(), 0.0);
+	return sum / vec.size();
 }
 
 // compute geometric avg.
 inline double AsianPricer::Geometric(const std::vector<double>& vec)
 {
-	double avg = vec[0];
+	if (vec.empty()) return 0.0;
+	auto logSum = std::accumulate(vec.begin(), vec.end(), 0.0,
+		[](double acc, double val) {
+			if (val > 0) {
+				return acc + std::log(val);
+			}
+			return acc;
+		});
 
-	for (const auto& elem : vec)
-		avg *= elem;
-
-	return (1.0 / std::pow(avg, vec.size()));
+	return std::exp(logSum / vec.size());
 }
 
 // find max
 inline double AsianPricer::Max(const std::vector<double>& vec)
 {
-	double max = vec[0];
-
-	for (const auto& elem : vec)
-		max = std::max(elem, max);
-
-	return max;
+	if (vec.empty()) return 0.0;
+	return *std::max_element(vec.begin(), vec.end());
 }
 
 // A path for each simulation draw.
