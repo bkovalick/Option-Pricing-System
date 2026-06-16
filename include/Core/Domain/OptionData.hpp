@@ -8,15 +8,15 @@
 
 struct OptionData
 {
-	std::string OptionName;
 	double K;
 	double T;
 	double sig;
 	double D;
-	int type;
 	double r;
 	double b;
-	double IC;
+	double IC; 
+	int type;
+	std::string OptionName;
 
 	OptionData(std::string optionName, double strike, double expiration, double volatility, 
 	           double dividend, int optionType, double interestRate, double initialPrice)

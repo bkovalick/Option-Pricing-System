@@ -47,7 +47,7 @@ double MonteCarloEngine::computePriceSequential()
         throw std::runtime_error("MonteCarloEngine: pricer not created");
     }
 
-    for (int i = 0; i <= numSimulations_; i++) {
+    for (int i = 0; i < numSimulations_; i++) {
         if ((i / 5000) * 5000 == i) {
             std::cout << "Simulation " << i << std::endl;
         }
@@ -71,7 +71,7 @@ double MonteCarloEngine::computePriceOpenMP()
         std::vector<double> localPath(fdm_->NT + 1);
 
         #pragma omp for schedule(static)
-        for (int i = 0; i <= numSimulations_; i++) {
+        for (int i = 0; i < numSimulations_; i++) {
             if ((i / 5000) * 5000 == i) {
                 std::cout << "Simulation " << i << std::endl;
             }
